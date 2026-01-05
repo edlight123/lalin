@@ -121,6 +121,13 @@
     "days": "jou",
     "predictions": "Previzyon",
     "patterns": "Modèl",
+    "nextPeriodOn": "Pwochen règ la ka vini {{date}}",
+    "nextPeriodUnknown": "Nou pa konnen kilè pwochen règ la ap vini",
+    "last30Days": "30 dènye jou",
+    "moodBreakdown": "Santiman yo",
+    "topSymptoms": "Sentòm ki pi souvan",
+    "noSymptomData": "Pa gen sentòm anrejistre nan 30 dènye jou yo",
+    "hintPrefix": "Ti endikasyon:",
     "noData": "Anrejistre premye règ ou pou w wè enfòmasyon",
     "notEnoughData": "Anrejistre omwen 2 règ pou w ka wè enfòmasyon sou sik ou"
   },

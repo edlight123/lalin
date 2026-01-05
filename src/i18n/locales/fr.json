@@ -121,6 +121,13 @@
     "days": "jours",
     "predictions": "Prédictions",
     "patterns": "Tendances",
+    "nextPeriodOn": "Prochaines règles prévues le {{date}}",
+    "nextPeriodUnknown": "Date des prochaines règles inconnue",
+    "last30Days": "30 derniers jours",
+    "moodBreakdown": "Humeur (répartition)",
+    "topSymptoms": "Symptômes fréquents",
+    "noSymptomData": "Aucun symptôme enregistré ces 30 derniers jours",
+    "hintPrefix": "Indice :",
     "noData": "Enregistrez vos premières règles pour voir des aperçus",
     "notEnoughData": "Enregistrez au moins 2 périodes de règles pour voir des aperçus"
   },

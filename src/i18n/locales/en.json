@@ -121,6 +121,13 @@
     "days": "days",
     "predictions": "Predictions",
     "patterns": "Patterns",
+    "nextPeriodOn": "Next period expected on {{date}}",
+    "nextPeriodUnknown": "Next period date unknown",
+    "last30Days": "Last 30 days",
+    "moodBreakdown": "Mood breakdown",
+    "topSymptoms": "Top symptoms",
+    "noSymptomData": "No symptom logs in the last 30 days",
+    "hintPrefix": "Pattern hint:",
     "noData": "Log your first period to see insights",
     "notEnoughData": "Log at least 2 periods to see cycle insights"
   },
