@@ -9,11 +9,22 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 import { useTheme } from '../contexts/ThemeContext';
+import { exportAllData, resetAllData } from '../services/tracking';
+import {
+  getNotificationSettings,
+  setDailyReminderEnabled,
+  setPeriodReminderEnabled,
+} from '../services/notifications';
 
 export default function ProfileScreen() {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
+
+  const [dailyReminderEnabled, setDailyEnabled] = React.useState(false);
+  const [periodReminderEnabled, setPeriodEnabled] = React.useState(false);
 
   type IoniconName = React.ComponentProps<typeof Ionicons>['name'];
   type MenuItem = {
@@ -30,6 +41,51 @@ export default function ProfileScreen() {
     Alert.alert(title, message, [{ text: t('common.done') }]);
   };
 
+  React.useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const settings = await getNotificationSettings();
+      if (!mounted) return;
+      setDailyEnabled(settings.dailyReminderEnabled);
+      setPeriodEnabled(settings.periodReminderEnabled);
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const exportData = async () => {
+    const bundle = await exportAllData();
+    const json = JSON.stringify(bundle, null, 2);
+    const file = new FileSystem.File(FileSystem.Paths.cache, 'lalin-export.json');
+    file.write(json);
+    const uri = file.uri;
+
+    if (!(await Sharing.isAvailableAsync())) {
+      showInfo(t('profile.exportData'), t('profile.sharingNotAvailable'));
+      return;
+    }
+
+    await Sharing.shareAsync(uri, {
+      mimeType: 'application/json',
+      dialogTitle: t('profile.exportData'),
+    });
+  };
+
+  const confirmReset = () => {
+    Alert.alert(t('profile.resetTitle'), t('profile.resetMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('common.delete'),
+        style: 'destructive',
+        onPress: async () => {
+          await resetAllData();
+          showInfo(t('profile.resetTitle'), t('profile.resetDone'));
+        },
+      },
+    ]);
+  };
+
   const menuItems: MenuItem[] = [
     {
       icon: 'language',
@@ -37,9 +93,14 @@ export default function ProfileScreen() {
       onPress: () => showInfo(t('profile.language'), t('profile.languageHint')),
     },
     {
-      icon: 'notifications',
-      title: t('profile.notifications'),
-      onPress: () => showInfo(t('profile.notifications'), t('profile.comingSoon')),
+      icon: 'download',
+      title: t('profile.exportData'),
+      onPress: exportData,
+    },
+    {
+      icon: 'trash',
+      title: t('profile.resetData'),
+      onPress: confirmReset,
     },
     {
       icon: 'lock-closed',
@@ -151,6 +212,58 @@ export default function ProfileScreen() {
 
       {/* Menu Items */}
       <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
+        <Text style={[styles.cardTitle, { color: theme.colors.text }]}>
+          {t('profile.notifications')}
+        </Text>
+
+        <TouchableOpacity
+          style={[styles.toggleRow, { borderBottomColor: theme.colors.border }]}
+          onPress={async () => {
+            const next = !dailyReminderEnabled;
+            await setDailyReminderEnabled(next, {
+              title: t('app.name'),
+              body: t('profile.dailyReminderBody'),
+            });
+            const settings = await getNotificationSettings();
+            setDailyEnabled(settings.dailyReminderEnabled);
+            if (next && !settings.dailyReminderEnabled) {
+              showInfo(t('profile.notifications'), t('profile.permissionRequired'));
+            }
+          }}
+        >
+          <Text style={[styles.menuText, { color: theme.colors.text }]}>
+            {t('profile.dailyReminder')}
+          </Text>
+          <Text style={{ color: dailyReminderEnabled ? theme.colors.success : theme.colors.textLight }}>
+            {dailyReminderEnabled ? t('profile.enabled') : t('profile.disabled')}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.toggleRow, { borderBottomColor: theme.colors.border }]}
+          onPress={async () => {
+            const next = !periodReminderEnabled;
+            await setPeriodReminderEnabled(next, {
+              title: t('app.name'),
+              body: t('profile.periodReminderBody'),
+            });
+            const settings = await getNotificationSettings();
+            setPeriodEnabled(settings.periodReminderEnabled);
+            if (next && !settings.periodReminderEnabled) {
+              showInfo(t('profile.notifications'), t('profile.permissionRequired'));
+            }
+          }}
+        >
+          <Text style={[styles.menuText, { color: theme.colors.text }]}>
+            {t('settings.periodReminder')}
+          </Text>
+          <Text style={{ color: periodReminderEnabled ? theme.colors.success : theme.colors.textLight }}>
+            {periodReminderEnabled ? t('profile.enabled') : t('profile.disabled')}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
         {menuItems.map((item, index) => (
           <TouchableOpacity
             key={index}
@@ -247,6 +360,13 @@ const styles = StyleSheet.create({
   },
   menuText: {
     fontSize: 16,
+  },
+  toggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
   },
   version: {
     textAlign: 'center',

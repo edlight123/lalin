@@ -1,6 +1,6 @@
 import type { PeriodEntry, SymptomEntry, IsoDateString, MoodKey } from '../types/tracking';
 import type { MarkedDates } from 'react-native-calendars/src/types';
-import { getJson, setJson } from './storage';
+import { getJson, removeKey, setJson } from './storage';
 import { enumerateIsoDates } from '../utils/dates';
 
 const KEYS = {
@@ -9,6 +9,15 @@ const KEYS = {
   symptoms: 'lalin_symptoms_v1',
   moodByDate: 'lalin_mood_by_date_v1',
 } as const;
+
+export type ExportBundleV1 = {
+  version: 1;
+  exportedAt: string;
+  onboardingDone: boolean;
+  periods: PeriodEntry[];
+  symptoms: SymptomEntry[];
+  moodsByDate: MoodByDate;
+};
 
 export async function getOnboardingDone(): Promise<boolean> {
   return getJson<boolean>(KEYS.onboardingDone, false);
@@ -100,6 +109,33 @@ export async function getMoodForDate(date: IsoDateString): Promise<MoodKey | und
 export async function setMoodForDate(date: IsoDateString, mood: MoodKey): Promise<void> {
   const map = await getJson<MoodByDate>(KEYS.moodByDate, {});
   await setJson<MoodByDate>(KEYS.moodByDate, { ...map, [date]: mood });
+}
+
+export async function exportAllData(): Promise<ExportBundleV1> {
+  const [onboardingDone, periods, symptoms, moodsByDate] = await Promise.all([
+    getOnboardingDone(),
+    listPeriods(),
+    listSymptoms(),
+    listMoodsByDate(),
+  ]);
+
+  return {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    onboardingDone,
+    periods,
+    symptoms,
+    moodsByDate,
+  };
+}
+
+export async function resetAllData(): Promise<void> {
+  await Promise.all([
+    removeKey(KEYS.onboardingDone),
+    removeKey(KEYS.periods),
+    removeKey(KEYS.symptoms),
+    removeKey(KEYS.moodByDate),
+  ]);
 }
 
 export function buildPeriodMarkedDates(
