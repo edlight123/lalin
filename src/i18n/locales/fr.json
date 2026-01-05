@@ -1,0 +1,179 @@
+{
+  "app": {
+    "name": "Lalin",
+    "tagline": "Connaissez votre corps, protégez votre santé"
+  },
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "next": "Suivant",
+    "back": "Retour",
+    "done": "Terminé",
+    "continue": "Continuer",
+    "skip": "Passer",
+    "edit": "Modifier",
+    "delete": "Supprimer"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "calendar": "Calendrier",
+    "insights": "Aperçus",
+    "learn": "Apprendre",
+    "profile": "Profil"
+  },
+  "onboarding": {
+    "welcome": "Bienvenue sur Lalin",
+    "subtitle": "Votre compagnon personnel de santé féminine",
+    "getStarted": "Commencer",
+    "step1Title": "Suivez Votre Cycle",
+    "step1Desc": "Enregistrez vos règles et comprenez le rythme naturel de votre corps",
+    "step2Title": "Obtenez des Aperçus",
+    "step2Desc": "Prédictions et informations de santé personnalisées",
+    "step3Title": "Restez Informée",
+    "step3Desc": "Apprenez sur la santé des femmes dans votre langue"
+  },
+  "home": {
+    "greeting": "Bonjour",
+    "nextPeriod": "Prochaines règles prévues",
+    "daysUntil": "dans {{count}} jours",
+    "nextPeriodUnknown": "date inconnue",
+    "nextPeriodToday": "aujourd'hui",
+    "currentPhase": "Phase Actuelle",
+    "logPeriod": "Enregistrer Règles",
+    "logSymptoms": "Enregistrer Symptômes",
+    "todayFeeling": "Comment vous sentez-vous aujourd'hui?",
+    "moodToday": "Humeur du jour",
+    "learnCycleDesc": "Découvrez les phases et à quoi vous attendre"
+  },
+  "phases": {
+    "unknown": "—",
+    "menstrual": "Phase menstruelle",
+    "follicular": "Phase folliculaire",
+    "ovulation": "Ovulation",
+    "luteal": "Phase lutéale"
+  },
+  "calendar": {
+    "title": "Calendrier",
+    "period": "Règles",
+    "fertile": "Fenêtre Fertile",
+    "ovulation": "Ovulation",
+    "addPeriod": "Ajouter des règles",
+    "noData": "Aucune donnée de règles pour le moment"
+  },
+  "tracking": {
+    "logPeriod": "Enregistrer Vos Règles",
+    "logSymptoms": "Enregistrer Symptômes",
+    "tapToSelect": "Touchez une date sur le calendrier",
+    "startDate": "Date de Début",
+    "endDate": "Date de Fin",
+    "endDateOptional": "Date de fin (optionnelle)",
+    "chooseEndDate": "Choisir la date de fin",
+    "clearEndDate": "Effacer la date de fin",
+    "flow": "Flux",
+    "flowLight": "Léger",
+    "flowMedium": "Moyen",
+    "flowHeavy": "Abondant",
+    "symptoms": "Symptômes",
+    "mood": "Humeur",
+    "notes": "Notes",
+    "saved": "Enregistré"
+  },
+  "symptoms": {
+    "cramps": "Crampes",
+    "headache": "Mal de Tête",
+    "bloating": "Ballonnements",
+    "fatigue": "Fatigue",
+    "acne": "Acné",
+    "breastTenderness": "Sensibilité des Seins",
+    "backPain": "Mal de Dos",
+    "nausea": "Nausée"
+  },
+  "moods": {
+    "happy": "Heureuse",
+    "sad": "Triste",
+    "anxious": "Anxieuse",
+    "irritable": "Irritable",
+    "calm": "Calme",
+    "energetic": "Énergique",
+    "tired": "Fatiguée"
+  },
+  "insights": {
+    "title": "Vos Aperçus",
+    "subtitle": "Basé sur vos règles enregistrées",
+    "cycleLength": "Durée du Cycle",
+    "periodLength": "Durée des Règles",
+    "cycle": "Cycle moyen",
+    "period": "Règles moyennes",
+    "days": "jours",
+    "predictions": "Prédictions",
+    "patterns": "Tendances",
+    "noData": "Enregistrez vos premières règles pour voir des aperçus",
+    "notEnoughData": "Enregistrez au moins 2 périodes de règles pour voir des aperçus"
+  },
+  "learn": {
+    "title": "Apprendre",
+    "disclaimer": "Information éducative uniquement. Ceci ne remplace pas un avis médical.",
+    "categories": {
+      "cycle": "Comprendre Votre Cycle",
+      "health": "Santé des Femmes",
+      "fertility": "Fertilité",
+      "wellness": "Bien-être"
+    },
+    "articles": {
+      "cycleBasics": {
+        "title": "Bases du cycle : les principales phases",
+        "body": "Un cycle typique a des phases. Menstruations : jours de saignement. Phase folliculaire : l'énergie peut augmenter pendant la préparation d'un ovule. Ovulation : libération d'un ovule au milieu du cycle. Phase lutéale : le corps se prépare aux prochaines règles; des symptômes de SPM peuvent apparaître. Chaque corps est différent."
+      },
+      "trackingTips": {
+        "title": "Conseils utiles pour le suivi",
+        "body": "Notez la date de début des règles, la date de fin (optionnelle), le flux et des notes. Avec le temps, des tendances comme la durée moyenne du cycle deviennent plus claires. Même avec un cycle irrégulier, le suivi aide à repérer les changements et à en parler à un professionnel si besoin."
+      },
+      "commonSymptoms": {
+        "title": "Symptômes fréquents",
+        "body": "Crampes, ballonnements, maux de tête, fatigue, acné et variations d'humeur sont fréquents autour des règles. Le repos, l'hydratation, une activité douce et la chaleur peuvent aider certaines personnes. Des symptômes très intenses ne doivent pas être ignorés."
+      },
+      "whenToSeekCare": {
+        "title": "Quand consulter",
+        "body": "Pensez à consulter si vous avez des saignements très abondants, des malaises/évanouissements, une douleur sévère, des saignements entre les règles, un changement soudain du cycle, ou des symptômes qui perturbent la vie quotidienne. En cas d'urgence, cherchez de l'aide immédiatement."
+      },
+      "fertileWindow": {
+        "title": "Fenêtre fertile : l'essentiel",
+        "body": "La grossesse est la plus probable dans les jours précédant et incluant l'ovulation. Les applications peuvent estimer le moment, mais ce n'est pas exact. Si vous essayez de concevoir ou d'éviter une grossesse, utilisez des méthodes fiables et des conseils d'un professionnel."
+      },
+      "contraception": {
+        "title": "Contraception et planification",
+        "body": "Les méthodes de contraception fonctionnent différemment (barrières, hormones, DIU, etc.). Le meilleur choix dépend de votre santé et de vos préférences. Un professionnel de santé peut vous aider à choisir."
+      },
+      "sleepStress": {
+        "title": "Sommeil et stress",
+        "body": "Le sommeil et le stress peuvent influencer l'humeur, l'énergie et même le timing du cycle. De petites routines—heure de coucher régulière, respiration relaxante, courtes marches—peuvent soutenir le bien-être selon les phases."
+      },
+      "nutritionHydration": {
+        "title": "Alimentation et hydratation",
+        "body": "Des repas réguliers, des aliments riches en fer et assez d'eau peuvent soutenir l'énergie—surtout pendant les jours de saignement. Si vous vous sentez anormalement faible ou étourdie, pensez à en parler à un professionnel."
+      }
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "language": "Langue",
+    "notifications": "Notifications",
+    "privacy": "Confidentialité",
+    "help": "Aide et Support",
+    "about": "À Propos de Lalin",
+    "comingSoon": "Bientôt disponible.",
+    "languageHint": "Utilisez les boutons de langue ci-dessus pour changer de langue.",
+    "helpText": "Si quelque chose ne semble pas correct, essayez de redémarrer l'application. Vos données sont stockées sur votre appareil.",
+    "aboutText": "Lalin est un compagnon axé sur la confidentialité pour suivre votre cycle et apprendre en créole, en français et en anglais."
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue",
+    "languageDesc": "Choisissez votre langue préférée",
+    "notifications": "Notifications",
+    "periodReminder": "Rappel des Règles",
+    "fertileWindow": "Alerte Fenêtre Fertile",
+    "privacy": "Confidentialité et Données",
+    "dataDesc": "Vos données restent privées sur votre appareil"
+  }
+}

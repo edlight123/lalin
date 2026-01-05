@@ -1,0 +1,179 @@
+{
+  "app": {
+    "name": "Lalin",
+    "tagline": "Konnen kò ou, pwoteje lasante ou"
+  },
+  "common": {
+    "save": "Konsève",
+    "cancel": "Anile",
+    "next": "Swivan",
+    "back": "Tounen",
+    "done": "Fini",
+    "continue": "Kontinye",
+    "skip": "Sote",
+    "edit": "Modifye",
+    "delete": "Efase"
+  },
+  "navigation": {
+    "home": "Akèy",
+    "calendar": "Kalandriye",
+    "insights": "Enfòmasyon",
+    "learn": "Aprann",
+    "profile": "Profil"
+  },
+  "onboarding": {
+    "welcome": "Byenveni nan Lalin",
+    "subtitle": "Konpayon sante fanm ou",
+    "getStarted": "Kòmanse",
+    "step1Title": "Swiv Sik Ou",
+    "step1Desc": "Anrejistre règ ou epi konprann ritm natirèl kò ou",
+    "step2Title": "Jwenn Enfòmasyon",
+    "step2Desc": "Previzyon ak enfòmasyon sante pèsonalize",
+    "step3Title": "Rete Enfòme",
+    "step3Desc": "Aprann sou sante fanm nan lang ou"
+  },
+  "home": {
+    "greeting": "Bonjou",
+    "nextPeriod": "Pwochen règ ap vini",
+    "daysUntil": "nan {{count}} jou",
+    "nextPeriodUnknown": "dat la pa klè",
+    "nextPeriodToday": "jodi a",
+    "currentPhase": "Faz Aktyèl",
+    "logPeriod": "Anrejistre Règ",
+    "logSymptoms": "Anrejistre Sentòm",
+    "todayFeeling": "Kijan ou santi ou jodi a?",
+    "moodToday": "Santiman jodi a",
+    "learnCycleDesc": "Aprann sou faz yo ak sa pou w atann"
+  },
+  "phases": {
+    "unknown": "—",
+    "menstrual": "Faz règ",
+    "follicular": "Faz folikilè",
+    "ovulation": "Ovulasyon",
+    "luteal": "Faz luteal"
+  },
+  "calendar": {
+    "title": "Kalandriye",
+    "period": "Règ",
+    "fertile": "Peryòd Fètil",
+    "ovulation": "Ovulasyon",
+    "addPeriod": "Ajoute règ",
+    "noData": "Poko gen done règ"
+  },
+  "tracking": {
+    "logPeriod": "Anrejistre Règ Ou",
+    "logSymptoms": "Anrejistre Sentòm",
+    "tapToSelect": "Tape yon dat sou kalandriye a",
+    "startDate": "Dat Kòmansman",
+    "endDate": "Dat Finisman",
+    "endDateOptional": "Dat fini (opsyonèl)",
+    "chooseEndDate": "Chwazi dat fini",
+    "clearEndDate": "Retire dat fini",
+    "flow": "Ekoulman",
+    "flowLight": "Lejè",
+    "flowMedium": "Mwayen",
+    "flowHeavy": "Fò",
+    "symptoms": "Sentòm",
+    "mood": "Santiman",
+    "notes": "Nòt",
+    "saved": "Anrejistre"
+  },
+  "symptoms": {
+    "cramps": "Doulè",
+    "headache": "Tèt Fè Mal",
+    "bloating": "Vant Gonfle",
+    "fatigue": "Fatig",
+    "acne": "Bouton",
+    "breastTenderness": "Tete Fè Mal",
+    "backPain": "Do Fè Mal",
+    "nausea": "Kè Vire"
+  },
+  "moods": {
+    "happy": "Kontan",
+    "sad": "Tris",
+    "anxious": "Enkyete",
+    "irritable": "Fache",
+    "calm": "Kalm",
+    "energetic": "Plen Enèji",
+    "tired": "Fatige"
+  },
+  "insights": {
+    "title": "Enfòmasyon Ou Yo",
+    "subtitle": "Sou baz règ ou anrejistre",
+    "cycleLength": "Longè Sik",
+    "periodLength": "Longè Règ",
+    "cycle": "Sik mwayèn",
+    "period": "Règ mwayèn",
+    "days": "jou",
+    "predictions": "Previzyon",
+    "patterns": "Modèl",
+    "noData": "Anrejistre premye règ ou pou w wè enfòmasyon",
+    "notEnoughData": "Anrejistre omwen 2 règ pou w ka wè enfòmasyon sou sik ou"
+  },
+  "learn": {
+    "title": "Aprann",
+    "disclaimer": "Sa yo se enfòmasyon edikatif sèlman. Li pa ranplase konsèy medikal.",
+    "categories": {
+      "cycle": "Konprann Sik Ou",
+      "health": "Sante Fanm",
+      "fertility": "Fètilite",
+      "wellness": "Byennèt"
+    },
+    "articles": {
+      "cycleBasics": {
+        "title": "Baz sik la: prensipal faz yo",
+        "body": "Yon sik tipik gen faz. Faz règ: jou ou ap senyen. Faz folikilè: enèji ka monte pandan kò a ap prepare yon ze. Ovulasyon: lage ze a nan mitan sik la. Faz luteal: kò a ap prepare pou pwochen règ la; sentòm PMS ka parèt. Chak moun diferan."
+      },
+      "trackingTips": {
+        "title": "Konsèy pou swiv pi byen",
+        "body": "Anrejistre dat règ la kòmanse, dat li fini (opsyonèl), ekoulman, ak nòt. Avèk tan, modèl tankou longè sik mwayèn vin pi klè. Menm si sik la pa regilye, swiv la ka ede w remake chanjman epi pale ak yon pwofesyonèl si sa nesesè."
+      },
+      "commonSymptoms": {
+        "title": "Sentòm ki komen",
+        "body": "Doulè nan vant, vant gonfle, tèt fè mal, fatig, bouton, ak chanjman santiman yo ka komen bò kote règ la. Repo, bwè dlo, ti mouvman dou, ak chalè ka ede kèk moun. Si sentòm yo twò fò, pa inyore yo."
+      },
+      "whenToSeekCare": {
+        "title": "Kilè pou chèche swen",
+        "body": "Chèche swen si ou gen senyen ki twò fò, ou santi w pral tonbe, doulè ki sevè, senyen ant règ, yon gwo chanjman toudenkou nan sik ou, oswa sentòm ki deranje lavi chak jou. Si se ijans, chèche èd touswit."
+      },
+      "fertileWindow": {
+        "title": "Baz peryòd fètil la",
+        "body": "Gwosès pi fasil rive nan jou avan ovulasyon ak jou ovulasyon an. Aplikasyon yo ka bay estimasyon, men li pa egzak. Si ou vle ansent oswa ou vle evite gwosès, itilize metòd serye epi chèche konsèy yon pwofesyonèl."
+      },
+      "contraception": {
+        "title": "Kontrasepsyon ak planifikasyon",
+        "body": "Gen plizyè metòd pou evite gwosès (baryè, òmòn, IUD, elatriye). Pi bon chwa a depann de sante ou ak sa ou prefere. Yon pwofesyonèl lasante ka ede w chwazi."
+      },
+      "sleepStress": {
+        "title": "Dòmi ak estrès",
+        "body": "Dòmi ak estrès ka afekte santiman, enèji, e menm kijan sik la vini. Ti abitid—dòmi a menm lè, respire pou kalme tèt ou, ti mache kout—ka ede byennèt ou nan diferan faz."
+      },
+      "nutritionHydration": {
+        "title": "Manje ak bwè dlo",
+        "body": "Manje regilyèman, manje ki gen fè, epi bwè ase dlo ka ede enèji—sitou pandan jou règ yo. Si ou santi w fèb anpil oswa tèt vire, panse pale ak yon pwofesyonèl."
+      }
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "language": "Lang",
+    "notifications": "Notifikasyon",
+    "privacy": "Vi Prive",
+    "help": "Èd ak Sipò",
+    "about": "Konsènan Lalin",
+    "comingSoon": "Sa ap vini byento.",
+    "languageHint": "Sèvi ak bouton lang yo anlè a pou chanje lang.",
+    "helpText": "Si gen yon bagay ki pa parèt byen, eseye rekòmanse aplikasyon an. Done ou yo rete sou aparèy ou.",
+    "aboutText": "Lalin se yon konpayon ki respekte vi prive pou swiv sik ou epi aprann an kreyòl, franse, ak angle."
+  },
+  "settings": {
+    "title": "Paramèt",
+    "language": "Lang",
+    "languageDesc": "Chwazi lang ou prefere",
+    "notifications": "Notifikasyon",
+    "periodReminder": "Rapèl Règ",
+    "fertileWindow": "Alèt Peryòd Fètil",
+    "privacy": "Vi Prive ak Done",
+    "dataDesc": "Done ou rete prive sou aparèy ou"
+  }
+}

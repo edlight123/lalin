@@ -1,0 +1,179 @@
+{
+  "app": {
+    "name": "Lalin",
+    "tagline": "Know your body, protect your health"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "next": "Next",
+    "back": "Back",
+    "done": "Done",
+    "continue": "Continue",
+    "skip": "Skip",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "navigation": {
+    "home": "Home",
+    "calendar": "Calendar",
+    "insights": "Insights",
+    "learn": "Learn",
+    "profile": "Profile"
+  },
+  "onboarding": {
+    "welcome": "Welcome to Lalin",
+    "subtitle": "Your personal women's health companion",
+    "getStarted": "Get Started",
+    "step1Title": "Track Your Cycle",
+    "step1Desc": "Log your period and understand your body's natural rhythm",
+    "step2Title": "Get Insights",
+    "step2Desc": "Predictions and personalized health information",
+    "step3Title": "Stay Informed",
+    "step3Desc": "Learn about women's health in your language"
+  },
+  "home": {
+    "greeting": "Hello",
+    "nextPeriod": "Next period expected",
+    "daysUntil": "in {{count}} days",
+    "nextPeriodUnknown": "date unknown",
+    "nextPeriodToday": "today",
+    "currentPhase": "Current Phase",
+    "logPeriod": "Log Period",
+    "logSymptoms": "Log Symptoms",
+    "todayFeeling": "How are you feeling today?",
+    "moodToday": "Today's mood",
+    "learnCycleDesc": "Learn about the phases and what to expect"
+  },
+  "phases": {
+    "unknown": "—",
+    "menstrual": "Menstrual Phase",
+    "follicular": "Follicular Phase",
+    "ovulation": "Ovulation",
+    "luteal": "Luteal Phase"
+  },
+  "calendar": {
+    "title": "Calendar",
+    "period": "Period",
+    "fertile": "Fertile Window",
+    "ovulation": "Ovulation",
+    "addPeriod": "Add period",
+    "noData": "No period data yet"
+  },
+  "tracking": {
+    "logPeriod": "Log Your Period",
+    "logSymptoms": "Log Symptoms",
+    "tapToSelect": "Tap a date on the calendar to select",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "endDateOptional": "End date (optional)",
+    "chooseEndDate": "Choose end date",
+    "clearEndDate": "Clear end date",
+    "flow": "Flow",
+    "flowLight": "Light",
+    "flowMedium": "Medium",
+    "flowHeavy": "Heavy",
+    "symptoms": "Symptoms",
+    "mood": "Mood",
+    "notes": "Notes",
+    "saved": "Saved"
+  },
+  "symptoms": {
+    "cramps": "Cramps",
+    "headache": "Headache",
+    "bloating": "Bloating",
+    "fatigue": "Fatigue",
+    "acne": "Acne",
+    "breastTenderness": "Breast Tenderness",
+    "backPain": "Back Pain",
+    "nausea": "Nausea"
+  },
+  "moods": {
+    "happy": "Happy",
+    "sad": "Sad",
+    "anxious": "Anxious",
+    "irritable": "Irritable",
+    "calm": "Calm",
+    "energetic": "Energetic",
+    "tired": "Tired"
+  },
+  "insights": {
+    "title": "Your Insights",
+    "subtitle": "Based on your logged periods",
+    "cycleLength": "Cycle Length",
+    "periodLength": "Period Length",
+    "cycle": "Average Cycle",
+    "period": "Average Period",
+    "days": "days",
+    "predictions": "Predictions",
+    "patterns": "Patterns",
+    "noData": "Log your first period to see insights",
+    "notEnoughData": "Log at least 2 periods to see cycle insights"
+  },
+  "learn": {
+    "title": "Learn",
+    "disclaimer": "Educational information only. This is not medical advice.",
+    "categories": {
+      "cycle": "Understanding Your Cycle",
+      "health": "Women's Health",
+      "fertility": "Fertility",
+      "wellness": "Wellness"
+    },
+    "articles": {
+      "cycleBasics": {
+        "title": "Cycle basics: the main phases",
+        "body": "A typical cycle has phases. Menstrual: bleeding days. Follicular: energy may rise as the body prepares an egg. Ovulation: mid-cycle release of an egg. Luteal: the body prepares for the next period; PMS symptoms can appear. Every body is different."
+      },
+      "trackingTips": {
+        "title": "Tracking tips that help",
+        "body": "Log your period start date, optional end date, flow, and notes. Over time, patterns like average cycle length become clearer. If your cycle is irregular, tracking can still help you notice changes and talk to a clinician if needed."
+      },
+      "commonSymptoms": {
+        "title": "Common symptoms",
+        "body": "Cramps, bloating, headaches, fatigue, acne, and mood changes are common around your period. Rest, hydration, gentle movement, and heat can help some people. Severe symptoms are not something you should ignore."
+      },
+      "whenToSeekCare": {
+        "title": "When to seek care",
+        "body": "Consider medical care if you have very heavy bleeding, fainting, severe pain, bleeding between periods, a sudden change in your cycle, or symptoms that disrupt daily life. For emergencies, seek urgent help right away."
+      },
+      "fertileWindow": {
+        "title": "Fertile window basics",
+        "body": "Pregnancy is most likely in the days leading up to and including ovulation. Apps can estimate timing, but it’s not exact. If you’re trying to conceive or avoid pregnancy, consider using reliable methods and guidance from a clinician."
+      },
+      "contraception": {
+        "title": "Contraception and planning",
+        "body": "Different birth control options work in different ways (barrier methods, hormonal methods, IUDs, etc.). The best choice depends on your health and preferences. A clinician can help you choose what’s right for you."
+      },
+      "sleepStress": {
+        "title": "Sleep and stress",
+        "body": "Sleep and stress can affect mood, energy, and even cycle timing. Small routines—consistent sleep time, relaxing breath work, short walks—can support wellbeing during different cycle phases."
+      },
+      "nutritionHydration": {
+        "title": "Nutrition and hydration",
+        "body": "Regular meals, iron-rich foods, and enough water can support energy—especially during bleeding days. If you feel unusually weak or dizzy, consider checking in with a clinician."
+      }
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "language": "Language",
+    "notifications": "Notifications",
+    "privacy": "Privacy",
+    "help": "Help & Support",
+    "about": "About Lalin",
+    "comingSoon": "Coming soon.",
+    "languageHint": "Use the language buttons above to switch languages.",
+    "helpText": "If something doesn’t look right, try restarting the app. Your data is stored on your device.",
+    "aboutText": "Lalin is a privacy-first companion for tracking your cycle and learning in Kreyòl, French, and English."
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "languageDesc": "Choose your preferred language",
+    "notifications": "Notifications",
+    "periodReminder": "Period Reminder",
+    "fertileWindow": "Fertile Window Alert",
+    "privacy": "Privacy & Data",
+    "dataDesc": "Your data stays private on your device"
+  }
+}
