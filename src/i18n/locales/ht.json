@@ -67,7 +67,12 @@
     "symptomCount": "{{count}} sentòm",
     "symptomCount_other": "{{count}} sentòm",
     "deleteSymptomTitle": "Efase sentòm yo?",
-    "deleteSymptomMessage": "Sa ap efase sentòm yo pou {{date}}."
+    "deleteSymptomMessage": "Sa ap efase sentòm yo pou {{date}}.",
+    "dayDetails": "Detay: {{date}}",
+    "dayMood": "Santiman",
+    "daySymptoms": "Sentòm",
+    "addSymptoms": "Ajoute sentòm",
+    "none": "Pa gen"
   },
   "tracking": {
     "logPeriod": "Anrejistre Règ Ou",

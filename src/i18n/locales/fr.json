@@ -67,7 +67,12 @@
     "symptomCount": "{{count}} symptôme",
     "symptomCount_other": "{{count}} symptômes",
     "deleteSymptomTitle": "Supprimer ces symptômes ?",
-    "deleteSymptomMessage": "Cela supprimera les symptômes du {{date}}."
+    "deleteSymptomMessage": "Cela supprimera les symptômes du {{date}}.",
+    "dayDetails": "Détails : {{date}}",
+    "dayMood": "Humeur",
+    "daySymptoms": "Symptômes",
+    "addSymptoms": "Ajouter des symptômes",
+    "none": "Aucun"
   },
   "tracking": {
     "logPeriod": "Enregistrer Vos Règles",

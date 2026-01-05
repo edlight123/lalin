@@ -88,6 +88,10 @@ export async function deleteSymptoms(id: string): Promise<void> {
 
 type MoodByDate = Partial<Record<IsoDateString, MoodKey>>;
 
+export async function listMoodsByDate(): Promise<MoodByDate> {
+  return getJson<MoodByDate>(KEYS.moodByDate, {});
+}
+
 export async function getMoodForDate(date: IsoDateString): Promise<MoodKey | undefined> {
   const map = await getJson<MoodByDate>(KEYS.moodByDate, {});
   return map[date];

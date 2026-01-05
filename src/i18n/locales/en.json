@@ -67,7 +67,12 @@
     "symptomCount": "{{count}} symptom",
     "symptomCount_other": "{{count}} symptoms",
     "deleteSymptomTitle": "Delete symptom log?",
-    "deleteSymptomMessage": "This will delete the symptom log for {{date}}."
+    "deleteSymptomMessage": "This will delete the symptom log for {{date}}.",
+    "dayDetails": "Details: {{date}}",
+    "dayMood": "Mood",
+    "daySymptoms": "Symptoms",
+    "addSymptoms": "Add symptoms",
+    "none": "None"
   },
   "tracking": {
     "logPeriod": "Log Your Period",
