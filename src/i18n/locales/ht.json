@@ -58,7 +58,11 @@
     "fertile": "Peryòd Fètil",
     "ovulation": "Ovulasyon",
     "addPeriod": "Ajoute règ",
-    "noData": "Poko gen done règ"
+    "noData": "Poko gen done règ",
+    "history": "Dènye règ yo",
+    "deleteTitle": "Efase règ la?",
+    "deleteMessage": "Sa ap efase règ la soti {{startDate}} rive {{endDate}}.",
+    "confirm": "Konfime"
   },
   "tracking": {
     "logPeriod": "Anrejistre Règ Ou",

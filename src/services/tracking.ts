@@ -22,6 +22,11 @@ export async function listPeriods(): Promise<PeriodEntry[]> {
   return getJson<PeriodEntry[]>(KEYS.periods, []);
 }
 
+export async function getPeriodById(id: string): Promise<PeriodEntry | undefined> {
+  const periods = await listPeriods();
+  return periods.find((p) => p.id === id);
+}
+
 export async function addPeriod(entry: Omit<PeriodEntry, 'id' | 'createdAt'>): Promise<void> {
   const existing = await listPeriods();
   const now = new Date().toISOString();
@@ -31,6 +36,20 @@ export async function addPeriod(entry: Omit<PeriodEntry, 'id' | 'createdAt'>): P
     createdAt: now,
   };
   await setJson(KEYS.periods, [withId, ...existing]);
+}
+
+export async function updatePeriod(
+  id: string,
+  patch: Partial<Omit<PeriodEntry, 'id' | 'createdAt'>>,
+): Promise<void> {
+  const existing = await listPeriods();
+  const updated = existing.map((p) => (p.id === id ? { ...p, ...patch } : p));
+  await setJson(KEYS.periods, updated);
+}
+
+export async function deletePeriod(id: string): Promise<void> {
+  const existing = await listPeriods();
+  await setJson(KEYS.periods, existing.filter((p) => p.id !== id));
 }
 
 export async function listSymptoms(): Promise<SymptomEntry[]> {

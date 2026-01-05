@@ -1,24 +1,47 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import type { MarkedDates } from 'react-native-calendars/src/types';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { useTheme } from '../contexts/ThemeContext';
 import type { FlowLevel, IsoDateString } from '../types/tracking';
-import { addPeriod } from '../services/tracking';
+import { addPeriod, getPeriodById, updatePeriod } from '../services/tracking';
+
+type RouteParams = {
+  periodId?: string;
+};
 
 export default function LogPeriodScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const periodId = (route.params as RouteParams | undefined)?.periodId;
 
   const [startDate, setStartDate] = useState<IsoDateString | null>(null);
   const [endDate, setEndDate] = useState<IsoDateString | null>(null);
   const [selectingEnd, setSelectingEnd] = useState(false);
   const [flow, setFlow] = useState<FlowLevel>('medium');
   const [notes, setNotes] = useState('');
+
+  useEffect(() => {
+    if (!periodId) return;
+    let mounted = true;
+    (async () => {
+      const existing = await getPeriodById(periodId);
+      if (!existing || !mounted) return;
+      setStartDate(existing.startDate);
+      setEndDate(existing.endDate ?? null);
+      setFlow(existing.flow ?? 'medium');
+      setNotes(existing.notes ?? '');
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, [periodId]);
 
   const markedDates = useMemo(() => {
     const marked: MarkedDates = {};
@@ -63,12 +86,18 @@ export default function LogPeriodScreen() {
       return;
     }
 
-    await addPeriod({
+    const payload = {
       startDate,
       endDate: endDate ?? undefined,
       flow,
       notes: notes.trim() ? notes.trim() : undefined,
-    });
+    };
+
+    if (periodId) {
+      await updatePeriod(periodId, payload);
+    } else {
+      await addPeriod(payload);
+    }
 
     Alert.alert(t('tracking.saved'));
     navigation.goBack();

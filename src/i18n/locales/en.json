@@ -58,7 +58,11 @@
     "fertile": "Fertile Window",
     "ovulation": "Ovulation",
     "addPeriod": "Add period",
-    "noData": "No period data yet"
+    "noData": "No period data yet",
+    "history": "Recent periods",
+    "deleteTitle": "Delete period?",
+    "deleteMessage": "This will delete the period from {{startDate}} to {{endDate}}.",
+    "confirm": "Confirm"
   },
   "tracking": {
     "logPeriod": "Log Your Period",

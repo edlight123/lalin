@@ -58,7 +58,11 @@
     "fertile": "Fenêtre Fertile",
     "ovulation": "Ovulation",
     "addPeriod": "Ajouter des règles",
-    "noData": "Aucune donnée de règles pour le moment"
+    "noData": "Aucune donnée de règles pour le moment",
+    "history": "Règles récentes",
+    "deleteTitle": "Supprimer ces règles ?",
+    "deleteMessage": "Cela supprimera les règles du {{startDate}} au {{endDate}}.",
+    "confirm": "Confirmer"
   },
   "tracking": {
     "logPeriod": "Enregistrer Vos Règles",

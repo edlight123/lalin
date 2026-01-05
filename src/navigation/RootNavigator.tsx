@@ -20,7 +20,7 @@ import { getOnboardingDone } from '../services/tracking';
 export type RootStackParamList = {
   Onboarding: undefined;
   MainTabs: undefined;
-  LogPeriod: undefined;
+  LogPeriod: { periodId?: string } | undefined;
   LogSymptoms: undefined;
 };
 
