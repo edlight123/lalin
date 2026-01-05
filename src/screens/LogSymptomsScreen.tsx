@@ -1,13 +1,19 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, ScrollView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import type { DateData } from 'react-native-calendars';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import type { RouteProp } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { useTheme } from '../contexts/ThemeContext';
 import type { IsoDateString, MoodKey } from '../types/tracking';
-import { addSymptoms } from '../services/tracking';
+import type { RootStackParamList } from '../navigation/RootNavigator';
+import { addSymptoms, getSymptomById, updateSymptoms } from '../services/tracking';
+
+type LogSymptomsRoute = RouteProp<RootStackParamList, 'LogSymptoms'>;
+type LogSymptomsNav = NativeStackNavigationProp<RootStackParamList>;
 
 const symptomKeys = [
   'cramps',
@@ -25,12 +31,31 @@ const moodKeys = ['happy', 'sad', 'anxious', 'irritable', 'calm', 'energetic', '
 export default function LogSymptomsScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<LogSymptomsNav>();
+  const route = useRoute<LogSymptomsRoute>();
+
+  const symptomId = route.params?.symptomId;
 
   const [date, setDate] = useState<IsoDateString | null>(null);
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [mood, setMood] = useState<MoodKey | undefined>(undefined);
   const [notes, setNotes] = useState('');
+
+  useEffect(() => {
+    if (!symptomId) return;
+    let mounted = true;
+    (async () => {
+      const existing = await getSymptomById(symptomId);
+      if (!existing || !mounted) return;
+      setDate(existing.date);
+      setSelectedSymptoms(existing.symptoms ?? []);
+      setMood(existing.mood);
+      setNotes(existing.notes ?? '');
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, [symptomId]);
 
   const markedDates = useMemo(() => {
     if (!date) return {};
@@ -54,12 +79,18 @@ export default function LogSymptomsScreen() {
       return;
     }
 
-    await addSymptoms({
+    const payload = {
       date,
       symptoms: selectedSymptoms,
       mood,
       notes: notes.trim() ? notes.trim() : undefined,
-    });
+    };
+
+    if (symptomId) {
+      await updateSymptoms(symptomId, payload);
+    } else {
+      await addSymptoms(payload);
+    }
 
     Alert.alert(t('tracking.saved'));
     navigation.goBack();

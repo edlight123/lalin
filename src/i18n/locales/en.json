@@ -62,7 +62,12 @@
     "history": "Recent periods",
     "deleteTitle": "Delete period?",
     "deleteMessage": "This will delete the period from {{startDate}} to {{endDate}}.",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "symptomHistory": "Recent symptom logs",
+    "symptomCount": "{{count}} symptom",
+    "symptomCount_other": "{{count}} symptoms",
+    "deleteSymptomTitle": "Delete symptom log?",
+    "deleteSymptomMessage": "This will delete the symptom log for {{date}}."
   },
   "tracking": {
     "logPeriod": "Log Your Period",

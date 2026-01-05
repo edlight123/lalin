@@ -62,7 +62,12 @@
     "history": "Règles récentes",
     "deleteTitle": "Supprimer ces règles ?",
     "deleteMessage": "Cela supprimera les règles du {{startDate}} au {{endDate}}.",
-    "confirm": "Confirmer"
+    "confirm": "Confirmer",
+    "symptomHistory": "Symptômes récents",
+    "symptomCount": "{{count}} symptôme",
+    "symptomCount_other": "{{count}} symptômes",
+    "deleteSymptomTitle": "Supprimer ces symptômes ?",
+    "deleteSymptomMessage": "Cela supprimera les symptômes du {{date}}."
   },
   "tracking": {
     "logPeriod": "Enregistrer Vos Règles",

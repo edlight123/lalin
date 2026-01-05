@@ -21,7 +21,7 @@ export type RootStackParamList = {
   Onboarding: undefined;
   MainTabs: undefined;
   LogPeriod: { periodId?: string } | undefined;
-  LogSymptoms: undefined;
+  LogSymptoms: { symptomId?: string } | undefined;
 };
 
 export type TabParamList = {

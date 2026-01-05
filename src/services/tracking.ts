@@ -56,6 +56,11 @@ export async function listSymptoms(): Promise<SymptomEntry[]> {
   return getJson<SymptomEntry[]>(KEYS.symptoms, []);
 }
 
+export async function getSymptomById(id: string): Promise<SymptomEntry | undefined> {
+  const symptoms = await listSymptoms();
+  return symptoms.find((s) => s.id === id);
+}
+
 export async function addSymptoms(entry: Omit<SymptomEntry, 'id' | 'createdAt'>): Promise<void> {
   const existing = await listSymptoms();
   const now = new Date().toISOString();
@@ -65,6 +70,20 @@ export async function addSymptoms(entry: Omit<SymptomEntry, 'id' | 'createdAt'>)
     createdAt: now,
   };
   await setJson(KEYS.symptoms, [withId, ...existing]);
+}
+
+export async function updateSymptoms(
+  id: string,
+  patch: Partial<Omit<SymptomEntry, 'id' | 'createdAt'>>,
+): Promise<void> {
+  const existing = await listSymptoms();
+  const updated = existing.map((s) => (s.id === id ? { ...s, ...patch } : s));
+  await setJson(KEYS.symptoms, updated);
+}
+
+export async function deleteSymptoms(id: string): Promise<void> {
+  const existing = await listSymptoms();
+  await setJson(KEYS.symptoms, existing.filter((s) => s.id !== id));
 }
 
 type MoodByDate = Partial<Record<IsoDateString, MoodKey>>;

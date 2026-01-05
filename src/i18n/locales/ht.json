@@ -62,7 +62,12 @@
     "history": "Dènye règ yo",
     "deleteTitle": "Efase règ la?",
     "deleteMessage": "Sa ap efase règ la soti {{startDate}} rive {{endDate}}.",
-    "confirm": "Konfime"
+    "confirm": "Konfime",
+    "symptomHistory": "Dènye sentòm yo",
+    "symptomCount": "{{count}} sentòm",
+    "symptomCount_other": "{{count}} sentòm",
+    "deleteSymptomTitle": "Efase sentòm yo?",
+    "deleteSymptomMessage": "Sa ap efase sentòm yo pou {{date}}."
   },
   "tracking": {
     "logPeriod": "Anrejistre Règ Ou",

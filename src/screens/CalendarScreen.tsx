@@ -10,7 +10,8 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../contexts/ThemeContext';
 import type { RootStackParamList, TabParamList } from '../navigation/RootNavigator';
 import type { PeriodEntry } from '../types/tracking';
-import { buildPeriodMarkedDates, deletePeriod, listPeriods } from '../services/tracking';
+import type { SymptomEntry } from '../types/tracking';
+import { buildPeriodMarkedDates, deletePeriod, deleteSymptoms, listPeriods, listSymptoms } from '../services/tracking';
 
 type CalendarNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabParamList, 'Calendar'>,
@@ -24,13 +25,17 @@ export default function CalendarScreen() {
   const [markedDates, setMarkedDates] = useState<MarkedDates>({});
   const [hasData, setHasData] = useState(false);
   const [periods, setPeriods] = useState<PeriodEntry[]>([]);
+  const [symptoms, setSymptoms] = useState<SymptomEntry[]>([]);
 
   const refresh = useCallback(() => {
     (async () => {
       const fetchedPeriods = await listPeriods();
+      const fetchedSymptoms = await listSymptoms();
+
       const sorted = [...fetchedPeriods].sort((a, b) => b.startDate.localeCompare(a.startDate));
       setHasData(fetchedPeriods.length > 0);
       setPeriods(sorted);
+      setSymptoms([...fetchedSymptoms].sort((a, b) => b.date.localeCompare(a.date)));
       setMarkedDates(buildPeriodMarkedDates(fetchedPeriods, theme.colors.menstruation));
     })();
   }, [theme.colors.menstruation]);
@@ -50,6 +55,27 @@ export default function CalendarScreen() {
             style: 'destructive',
             onPress: async () => {
               await deletePeriod(period.id);
+              refresh();
+            },
+          },
+        ],
+      );
+    },
+    [refresh, t],
+  );
+
+  const confirmDeleteSymptom = useCallback(
+    (entry: SymptomEntry) => {
+      Alert.alert(
+        t('calendar.deleteSymptomTitle'),
+        t('calendar.deleteSymptomMessage', { date: entry.date }),
+        [
+          { text: t('common.cancel'), style: 'cancel' },
+          {
+            text: t('common.delete'),
+            style: 'destructive',
+            onPress: async () => {
+              await deleteSymptoms(entry.id);
               refresh();
             },
           },
@@ -122,6 +148,48 @@ export default function CalendarScreen() {
                 <TouchableOpacity
                   style={[styles.actionPill, { borderColor: theme.colors.border }]}
                   onPress={() => confirmDelete(p)}
+                >
+                  <Text style={{ color: theme.colors.error }}>{t('common.delete')}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
+        </View>
+      ) : null}
+
+      {symptoms.length > 0 ? (
+        <View
+          style={[
+            styles.historyCard,
+            { backgroundColor: theme.colors.surface, borderColor: theme.colors.border },
+          ]}
+        >
+          <Text style={[styles.historyTitle, { color: theme.colors.text }]}>
+            {t('calendar.symptomHistory')}
+          </Text>
+
+          {symptoms.slice(0, 10).map((s) => (
+            <View
+              key={s.id}
+              style={[styles.historyRow, { borderBottomColor: theme.colors.border }]}
+            >
+              <View style={styles.historyLeft}>
+                <Text style={[styles.historyDates, { color: theme.colors.text }]}>{s.date}</Text>
+                <Text style={[styles.historyMeta, { color: theme.colors.textSecondary }]}>
+                  {t('calendar.symptomCount', { count: s.symptoms.length })}
+                </Text>
+              </View>
+
+              <View style={styles.historyActions}>
+                <TouchableOpacity
+                  style={[styles.actionPill, { borderColor: theme.colors.border }]}
+                  onPress={() => navigation.navigate('LogSymptoms', { symptomId: s.id })}
+                >
+                  <Text style={{ color: theme.colors.text }}>{t('common.edit')}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.actionPill, { borderColor: theme.colors.border }]}
+                  onPress={() => confirmDeleteSymptom(s)}
                 >
                   <Text style={{ color: theme.colors.error }}>{t('common.delete')}</Text>
                 </TouchableOpacity>
