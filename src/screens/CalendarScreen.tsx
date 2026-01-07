@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Calendar } from 'react-native-calendars';
 import type { DateData } from 'react-native-calendars';
 import type { MarkedDates } from 'react-native-calendars/src/types';
@@ -13,6 +14,9 @@ import type { RootStackParamList, TabParamList } from '../navigation/RootNavigat
 import type { IsoDateString, MoodKey, PeriodEntry } from '../types/tracking';
 import type { SymptomEntry } from '../types/tracking';
 import { buildPeriodMarkedDates, deletePeriod, deleteSymptoms, listMoodsByDate, listPeriods, listSymptoms } from '../services/tracking';
+import { computePredictions } from '../services/predictions';
+import { enumerateIsoDates } from '../utils/dates';
+import { reschedulePeriodReminder } from '../services/notifications';
 
 type CalendarNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabParamList, 'Calendar'>,
@@ -45,6 +49,33 @@ export default function CalendarScreen() {
       const periodMarked = buildPeriodMarkedDates(fetchedPeriods, theme.colors.menstruation);
       const dotByDate: Record<string, { key: string; color: string }[]> = {};
 
+      const predictions = computePredictions(fetchedPeriods);
+      if (predictions.fertileWindow) {
+        for (const d of enumerateIsoDates(predictions.fertileWindow.start, predictions.fertileWindow.end)) {
+          if (!dotByDate[d]) dotByDate[d] = [];
+          if (!dotByDate[d].some((x) => x.key === 'fertile')) {
+            dotByDate[d].push({ key: 'fertile', color: theme.colors.follicular });
+          }
+        }
+      }
+
+      if (predictions.ovulation) {
+        const d = predictions.ovulation.date;
+        if (!dotByDate[d]) dotByDate[d] = [];
+        if (!dotByDate[d].some((x) => x.key === 'ovulation')) {
+          dotByDate[d].push({ key: 'ovulation', color: theme.colors.ovulation });
+        }
+      }
+
+      if (predictions.nextPeriod) {
+        for (const d of enumerateIsoDates(predictions.nextPeriod.range.start as IsoDateString, predictions.nextPeriod.range.end as IsoDateString)) {
+          if (!dotByDate[d]) dotByDate[d] = [];
+          if (!dotByDate[d].some((x) => x.key === 'predictedPeriod')) {
+            dotByDate[d].push({ key: 'predictedPeriod', color: theme.colors.menstruation });
+          }
+        }
+      }
+
       for (const s of fetchedSymptoms) {
         if (!dotByDate[s.date]) dotByDate[s.date] = [];
         if (!dotByDate[s.date].some((d) => d.key === 'symptoms')) {
@@ -72,7 +103,7 @@ export default function CalendarScreen() {
         merged[selectedDate] = {
           ...(merged[selectedDate] ?? {}),
           selected: true,
-          selectedColor: theme.colors.primary,
+          selectedColor: theme.colors.menstruation,
         };
       }
 
@@ -105,6 +136,10 @@ export default function CalendarScreen() {
             style: 'destructive',
             onPress: async () => {
               await deletePeriod(period.id);
+              await reschedulePeriodReminder({
+                title: t('app.name'),
+                body: t('profile.periodReminderBody'),
+              });
               refresh();
             },
           },
@@ -142,14 +177,14 @@ export default function CalendarScreen() {
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
       <View style={styles.header}>
         <Text style={[styles.title, { color: theme.colors.text }]}>{t('calendar.title')}</Text>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: theme.colors.primary }]}
           onPress={() => navigation.navigate('LogPeriod')}
         >
-          <Text style={styles.buttonText}>{t('calendar.addPeriod')}</Text>
+          <Text style={[styles.buttonText, { color: theme.colors.background }]}>{t('calendar.addPeriod')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -167,9 +202,32 @@ export default function CalendarScreen() {
           todayTextColor: theme.colors.primary,
           arrowColor: theme.colors.primary,
           selectedDayBackgroundColor: theme.colors.menstruation,
-          selectedDayTextColor: '#FFFFFF',
+          selectedDayTextColor: theme.colors.background,
         }}
       />
+
+      <View style={[styles.legend, { borderColor: theme.colors.border, backgroundColor: theme.colors.surface }]}>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendDot, { backgroundColor: theme.colors.menstruation }]} />
+          <Text style={[styles.legendText, { color: theme.colors.textSecondary }]}>{t('calendar.period')}</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendDot, { backgroundColor: theme.colors.follicular }]} />
+          <Text style={[styles.legendText, { color: theme.colors.textSecondary }]}>{t('calendar.fertile')}</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendDot, { backgroundColor: theme.colors.ovulation }]} />
+          <Text style={[styles.legendText, { color: theme.colors.textSecondary }]}>{t('calendar.ovulation')}</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendDot, { backgroundColor: theme.colors.accent }]} />
+          <Text style={[styles.legendText, { color: theme.colors.textSecondary }]}>{t('calendar.dayMood')}</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendDot, { backgroundColor: theme.colors.primary }]} />
+          <Text style={[styles.legendText, { color: theme.colors.textSecondary }]}>{t('calendar.daySymptoms')}</Text>
+        </View>
+      </View>
 
       {selectedDate ? (
         <View
@@ -190,7 +248,7 @@ export default function CalendarScreen() {
             {t('calendar.daySymptoms')}:
             {selectedDaySymptoms.length === 0
               ? ` ${t('calendar.none')}`
-              : ` ${selectedDaySymptoms[0].symptoms.map((k) => t(`symptoms.${k}`)).join(', ')}`}
+              : ` ${selectedDaySymptoms[0].symptoms.map((item) => item.custom ? item.key : t(`symptoms.${item.key}`)).join(', ')}`}
           </Text>
 
           <View style={[styles.historyActions, { justifyContent: 'flex-start' }]}
@@ -290,7 +348,7 @@ export default function CalendarScreen() {
           ))}
         </View>
       ) : null}
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -316,7 +374,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   buttonText: {
-    color: '#FFFFFF',
     fontWeight: '700',
   },
   empty: {
@@ -327,6 +384,27 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 14,
     gap: 10,
+  },
+  legend: {
+    borderWidth: 1,
+    borderRadius: 16,
+    padding: 12,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  legendDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  legendText: {
+    fontSize: 12,
   },
   historyTitle: {
     fontSize: 16,

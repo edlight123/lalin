@@ -1,22 +1,26 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../contexts/ThemeContext';
 import { addDays } from 'date-fns';
 import type { MoodKey } from '../types/tracking';
-import { listMoodsByDate, listPeriods, listSymptoms, mostRecentPeriodStart } from '../services/tracking';
+import { listMoodsByDate, listPeriods, listSymptoms } from '../services/tracking';
 import { safeParseIsoDate } from '../utils/dates';
 import { useFocusEffect } from '@react-navigation/native';
+import { computeCycleStats, computePredictions } from '../services/predictions';
 
 type PeriodStats = {
   hasEnoughData: boolean;
-  averageCycleDays?: number;
-  averagePeriodDays?: number;
   periodsCount: number;
-  nextPeriodDate?: string;
+  cycleDays?: number;
+  cycleRangeDays?: { min: number; max: number };
+  periodDays?: number;
+  nextPeriodRange?: { start: string; end: string };
   last30MoodCounts: Partial<Record<MoodKey, number>>;
   last30TopSymptoms: Array<{ key: string; count: number }>;
   hint?: string;
+  irregularityAlert?: string;
 };
 
 const MOODS: readonly MoodKey[] = ['happy', 'sad', 'anxious', 'irritable', 'calm', 'energetic', 'tired'] as const;
@@ -32,6 +36,8 @@ export default function InsightsScreen() {
     last30TopSymptoms: [],
   });
 
+  const [showPredictionExplanation, setShowPredictionExplanation] = React.useState(false);
+
   useFocusEffect(
     React.useCallback(() => {
       (async () => {
@@ -39,34 +45,32 @@ export default function InsightsScreen() {
         const symptoms = await listSymptoms();
         const moodsByDate = await listMoodsByDate();
 
-        const sorted = [...periods]
-          .map((p) => ({ ...p, startDate: p.startDate, endDate: p.endDate }))
-          .sort((a, b) => a.startDate.localeCompare(b.startDate));
+        const cycleStats = computeCycleStats(periods);
+        const predictions = computePredictions(periods);
 
-        const startDates = sorted
-          .map((p) => safeParseIsoDate(p.startDate))
-          .filter((d): d is Date => Boolean(d));
-
-        const cycleDiffs: number[] = [];
-        for (let i = 1; i < startDates.length; i++) {
-          const ms = startDates[i].getTime() - startDates[i - 1].getTime();
-          const days = Math.round(ms / (1000 * 60 * 60 * 24));
-          if (days > 0) cycleDiffs.push(days);
+        // Detect irregularity: if last cycle differs significantly from average
+        let irregularityAlert: string | undefined;
+        if (periods.length >= 3) {
+          const cycleLengths = [];
+          for (let i = 0; i < periods.length - 1; i++) {
+            const curr = periods[i];
+            const next = periods[i + 1];
+            const start1 = safeParseIsoDate(curr.startDate);
+            const start2 = safeParseIsoDate(next.startDate);
+            if (start1 && start2) {
+              const diff = Math.round((start1.getTime() - start2.getTime()) / (1000 * 60 * 60 * 24));
+              if (diff > 0) cycleLengths.push(diff);
+            }
+          }
+          if (cycleLengths.length >= 2) {
+            const avg = cycleLengths.reduce((a, b) => a + b, 0) / cycleLengths.length;
+            const lastCycle = cycleLengths[0];
+            const deviation = Math.abs(lastCycle - avg);
+            if (deviation > 7) {
+              irregularityAlert = t('insights.irregularityDetected', { lastCycle, avg: Math.round(avg) });
+            }
+          }
         }
-
-        const periodLengths: number[] = [];
-        for (const period of sorted) {
-          if (!period.endDate) continue;
-          const start = safeParseIsoDate(period.startDate);
-          const end = safeParseIsoDate(period.endDate);
-          if (!start || !end) continue;
-          const ms = end.getTime() - start.getTime();
-          const days = Math.round(ms / (1000 * 60 * 60 * 24)) + 1;
-          if (days > 0) periodLengths.push(days);
-        }
-
-        const avg = (arr: number[]) =>
-          arr.length === 0 ? undefined : Math.round(arr.reduce((a, b) => a + b, 0) / arr.length);
 
         const now = new Date();
         const cutoff = addDays(now, -30);
@@ -84,7 +88,8 @@ export default function InsightsScreen() {
         for (const entry of symptoms) {
           const d = safeParseIsoDate(entry.date);
           if (!d || d < cutoff) continue;
-          for (const key of entry.symptoms) {
+          for (const item of entry.symptoms) {
+            const key = item.key;
             symptomCounts[key] = (symptomCounts[key] ?? 0) + 1;
             if (entry.mood) {
               symptomMoodCounts[key] = symptomMoodCounts[key] ?? {};
@@ -97,18 +102,6 @@ export default function InsightsScreen() {
           .map(([key, count]) => ({ key, count }))
           .sort((a, b) => b.count - a.count)
           .slice(0, 4);
-
-        const avgCycleDays = avg(cycleDiffs);
-        const recentStart = mostRecentPeriodStart(periods);
-        const nextPeriodDate =
-          avgCycleDays && recentStart
-            ? (() => {
-                const start = safeParseIsoDate(recentStart);
-                if (!start) return undefined;
-                const next = addDays(start, avgCycleDays);
-                return next.toISOString().slice(0, 10);
-              })()
-            : undefined;
 
         let hint: string | undefined;
         const topSymptom = last30TopSymptoms[0];
@@ -123,14 +116,16 @@ export default function InsightsScreen() {
         }
 
         setStats({
-          hasEnoughData: cycleDiffs.length >= 1,
-          averageCycleDays: avgCycleDays,
-          averagePeriodDays: avg(periodLengths),
+          hasEnoughData: cycleStats.hasEnoughData,
           periodsCount: periods.length,
-          nextPeriodDate,
+          cycleDays: cycleStats.cycleLengthDays,
+          cycleRangeDays: cycleStats.cycleLengthRangeDays,
+          periodDays: cycleStats.periodLengthDays,
+          nextPeriodRange: predictions.nextPeriod ? predictions.nextPeriod.range : undefined,
           last30MoodCounts,
           last30TopSymptoms,
           hint,
+          irregularityAlert,
         });
       })();
     }, []),
@@ -143,7 +138,7 @@ export default function InsightsScreen() {
   }, [stats.hasEnoughData, stats.periodsCount, t]);
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
       <Text style={[styles.title, { color: theme.colors.text }]}>{t('insights.title')}</Text>
       <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>{subtitle}</Text>
 
@@ -151,14 +146,19 @@ export default function InsightsScreen() {
         <View style={[styles.card, { borderColor: theme.colors.border }]}>
           <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{t('insights.cycle')}</Text>
           <Text style={[styles.value, { color: theme.colors.text }]}>
-            {stats.averageCycleDays ?? '—'} {t('insights.days')}
+            {stats.cycleDays ?? '—'} {t('insights.days')}
           </Text>
+          {stats.cycleRangeDays ? (
+            <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}> 
+              {t('insights.cycleRange', { min: stats.cycleRangeDays.min, max: stats.cycleRangeDays.max })}
+            </Text>
+          ) : null}
 
           <Text style={[styles.cardTitle, { color: theme.colors.text, marginTop: 12 }]}>
             {t('insights.period')}
           </Text>
           <Text style={[styles.value, { color: theme.colors.text }]}>
-            {stats.averagePeriodDays ?? '—'} {t('insights.days')}
+            {stats.periodDays ?? '—'} {t('insights.days')}
           </Text>
         </View>
       ) : null}
@@ -167,11 +167,42 @@ export default function InsightsScreen() {
         <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{t('insights.predictions')}</Text>
         <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}
         >
-          {stats.nextPeriodDate
-            ? t('insights.nextPeriodOn', { date: stats.nextPeriodDate })
+          {stats.nextPeriodRange
+            ? t('insights.nextPeriodRange', { start: stats.nextPeriodRange.start, end: stats.nextPeriodRange.end })
             : t('insights.nextPeriodUnknown')}
         </Text>
+
+        {stats.hasEnoughData ? (
+          <TouchableOpacity
+            style={[styles.explanationToggle, { marginTop: 12 }]}
+            onPress={() => setShowPredictionExplanation(!showPredictionExplanation)}
+          >
+            <Text style={[styles.explanationToggleText, { color: theme.colors.primary }]}>
+              {showPredictionExplanation ? t('insights.hideExplanation') : t('insights.showExplanation')}
+            </Text>
+          </TouchableOpacity>
+        ) : null}
+
+        {showPredictionExplanation && stats.hasEnoughData ? (
+          <View style={[styles.explanationBox, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border, marginTop: 8 }]}>
+            <Text style={[styles.explanationTitle, { color: theme.colors.text }]}>
+              {t('insights.howPredictionsWork')}
+            </Text>
+            <Text style={[styles.explanationText, { color: theme.colors.textSecondary }]}>
+              {t('insights.predictionExplanation', { count: stats.periodsCount })}
+            </Text>
+            <Text style={[styles.explanationText, { color: theme.colors.textSecondary, marginTop: 8 }]}>
+              {t('insights.whyPredictionsChange')}
+            </Text>
+          </View>
+        ) : null}
       </View>
+
+      {stats.irregularityAlert ? (
+        <View style={[styles.card, styles.alertCard, { borderColor: theme.colors.warning, backgroundColor: theme.colors.surface }]}>
+          <Text style={[styles.alertText, { color: theme.colors.warning }]}>⚠ {stats.irregularityAlert}</Text>
+        </View>
+      ) : null}
 
       <View style={[styles.card, { borderColor: theme.colors.border }]}>
         <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{t('insights.last30Days')}</Text>
@@ -221,7 +252,7 @@ export default function InsightsScreen() {
           </Text>
         ) : null}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -277,6 +308,35 @@ const styles = StyleSheet.create({
   hint: {
     fontSize: 12,
     marginTop: 10,
+  },
+  alertCard: {
+    borderWidth: 2,
+  },
+  alertText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  explanationToggle: {
+    alignSelf: 'flex-start',
+  },
+  explanationToggleText: {
+    fontSize: 13,
+    fontWeight: '600',
+    textDecorationLine: 'underline',
+  },
+  explanationBox: {
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 12,
+  },
+  explanationTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    marginBottom: 6,
+  },
+  explanationText: {
+    fontSize: 13,
+    lineHeight: 18,
   },
   cardTitle: {
     fontSize: 14,

@@ -13,6 +13,8 @@ import ProfileScreen from '../screens/ProfileScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import LogPeriodScreen from '../screens/LogPeriodScreen';
 import LogSymptomsScreen from '../screens/LogSymptomsScreen';
+import LogSexualActivityScreen from '../screens/LogSexualActivityScreen';
+import LogOvulationScreen from '../screens/LogOvulationScreen';
 
 import { colors } from '../constants/theme';
 import { getOnboardingDone } from '../services/tracking';
@@ -22,6 +24,8 @@ export type RootStackParamList = {
   MainTabs: undefined;
   LogPeriod: { periodId?: string } | undefined;
   LogSymptoms: { symptomId?: string } | undefined;
+  LogSexualActivity: { activityId?: string } | undefined;
+  LogOvulation: { ovulationId?: string } | undefined;
 };
 
 export type TabParamList = {
@@ -41,18 +45,13 @@ function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
+        headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textLight,
         tabBarStyle: {
           borderTopWidth: 1,
           borderTopColor: colors.border,
           backgroundColor: colors.background,
-        },
-        headerStyle: {
-          backgroundColor: colors.background,
-        },
-        headerTitleStyle: {
-          fontWeight: '600',
         },
       }}
     >
@@ -111,6 +110,7 @@ function TabNavigator() {
 }
 
 export default function RootNavigator() {
+  const { t } = useTranslation();
   const [ready, setReady] = useState(false);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
 
@@ -153,9 +153,12 @@ export default function RootNavigator() {
         component={LogPeriodScreen}
         options={{
           headerShown: true,
-          title: ' ',
+          title: t('tracking.logPeriod'),
           headerTintColor: colors.primary,
           headerBackTitleVisible: false,
+          headerStyle: {
+            backgroundColor: colors.background,
+          },
         }}
       />
 
@@ -164,9 +167,40 @@ export default function RootNavigator() {
         component={LogSymptomsScreen}
         options={{
           headerShown: true,
-          title: ' ',
+          title: t('tracking.logSymptoms'),
           headerTintColor: colors.primary,
           headerBackTitleVisible: false,
+          headerStyle: {
+            backgroundColor: colors.background,
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="LogSexualActivity"
+        component={LogSexualActivityScreen}
+        options={{
+          headerShown: true,
+          title: t('tracking.logSexualActivity'),
+          headerTintColor: colors.primary,
+          headerBackTitleVisible: false,
+          headerStyle: {
+            backgroundColor: colors.background,
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="LogOvulation"
+        component={LogOvulationScreen}
+        options={{
+          headerShown: true,
+          title: t('tracking.logOvulation'),
+          headerTintColor: colors.primary,
+          headerBackTitleVisible: false,
+          headerStyle: {
+            backgroundColor: colors.background,
+          },
         }}
       />
     </Stack.Navigator>

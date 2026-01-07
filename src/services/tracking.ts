@@ -1,4 +1,4 @@
-import type { PeriodEntry, SymptomEntry, IsoDateString, MoodKey } from '../types/tracking';
+import type { PeriodEntry, SymptomEntry, IsoDateString, MoodKey, SexualActivityEntry, OvulationEntry } from '../types/tracking';
 import type { MarkedDates } from 'react-native-calendars/src/types';
 import { getJson, removeKey, setJson } from './storage';
 import { enumerateIsoDates } from '../utils/dates';
@@ -8,6 +8,8 @@ const KEYS = {
   periods: 'lalin_periods_v1',
   symptoms: 'lalin_symptoms_v1',
   moodByDate: 'lalin_mood_by_date_v1',
+  sexualActivity: 'lalin_sexual_activity_v1',
+  ovulation: 'lalin_ovulation_v1',
 } as const;
 
 export type ExportBundleV1 = {
@@ -17,6 +19,8 @@ export type ExportBundleV1 = {
   periods: PeriodEntry[];
   symptoms: SymptomEntry[];
   moodsByDate: MoodByDate;
+  sexualActivity: SexualActivityEntry[];
+  ovulation: OvulationEntry[];
 };
 
 export async function getOnboardingDone(): Promise<boolean> {
@@ -111,12 +115,82 @@ export async function setMoodForDate(date: IsoDateString, mood: MoodKey): Promis
   await setJson<MoodByDate>(KEYS.moodByDate, { ...map, [date]: mood });
 }
 
+export async function listSexualActivity(): Promise<SexualActivityEntry[]> {
+  return getJson<SexualActivityEntry[]>(KEYS.sexualActivity, []);
+}
+
+export async function getSexualActivityById(id: string): Promise<SexualActivityEntry | undefined> {
+  const activity = await listSexualActivity();
+  return activity.find((a) => a.id === id);
+}
+
+export async function addSexualActivity(entry: Omit<SexualActivityEntry, 'id' | 'createdAt'>): Promise<void> {
+  const existing = await listSexualActivity();
+  const now = new Date().toISOString();
+  const withId: SexualActivityEntry = {
+    ...entry,
+    id: `${now}_${Math.random().toString(16).slice(2)}`,
+    createdAt: now,
+  };
+  await setJson(KEYS.sexualActivity, [withId, ...existing]);
+}
+
+export async function updateSexualActivity(
+  id: string,
+  patch: Partial<Omit<SexualActivityEntry, 'id' | 'createdAt'>>,
+): Promise<void> {
+  const existing = await listSexualActivity();
+  const updated = existing.map((a) => (a.id === id ? { ...a, ...patch } : a));
+  await setJson(KEYS.sexualActivity, updated);
+}
+
+export async function deleteSexualActivity(id: string): Promise<void> {
+  const existing = await listSexualActivity();
+  await setJson(KEYS.sexualActivity, existing.filter((a) => a.id !== id));
+}
+
+export async function listOvulation(): Promise<OvulationEntry[]> {
+  return getJson<OvulationEntry[]>(KEYS.ovulation, []);
+}
+
+export async function getOvulationById(id: string): Promise<OvulationEntry | undefined> {
+  const ovulation = await listOvulation();
+  return ovulation.find((o) => o.id === id);
+}
+
+export async function addOvulation(entry: Omit<OvulationEntry, 'id' | 'createdAt'>): Promise<void> {
+  const existing = await listOvulation();
+  const now = new Date().toISOString();
+  const withId: OvulationEntry = {
+    ...entry,
+    id: `${now}_${Math.random().toString(16).slice(2)}`,
+    createdAt: now,
+  };
+  await setJson(KEYS.ovulation, [withId, ...existing]);
+}
+
+export async function updateOvulation(
+  id: string,
+  patch: Partial<Omit<OvulationEntry, 'id' | 'createdAt'>>,
+): Promise<void> {
+  const existing = await listOvulation();
+  const updated = existing.map((o) => (o.id === id ? { ...o, ...patch } : o));
+  await setJson(KEYS.ovulation, updated);
+}
+
+export async function deleteOvulation(id: string): Promise<void> {
+  const existing = await listOvulation();
+  await setJson(KEYS.ovulation, existing.filter((o) => o.id !== id));
+}
+
 export async function exportAllData(): Promise<ExportBundleV1> {
-  const [onboardingDone, periods, symptoms, moodsByDate] = await Promise.all([
+  const [onboardingDone, periods, symptoms, moodsByDate, sexualActivity, ovulation] = await Promise.all([
     getOnboardingDone(),
     listPeriods(),
     listSymptoms(),
     listMoodsByDate(),
+    listSexualActivity(),
+    listOvulation(),
   ]);
 
   return {
@@ -126,6 +200,8 @@ export async function exportAllData(): Promise<ExportBundleV1> {
     periods,
     symptoms,
     moodsByDate,
+    sexualActivity,
+    ovulation,
   };
 }
 
@@ -135,6 +211,8 @@ export async function resetAllData(): Promise<void> {
     removeKey(KEYS.periods),
     removeKey(KEYS.symptoms),
     removeKey(KEYS.moodByDate),
+    removeKey(KEYS.sexualActivity),
+    removeKey(KEYS.ovulation),
   ]);
 }
 

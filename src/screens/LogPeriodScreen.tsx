@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Calendar } from 'react-native-calendars';
 import type { MarkedDates } from 'react-native-calendars/src/types';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +9,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from '../contexts/ThemeContext';
 import type { FlowLevel, IsoDateString } from '../types/tracking';
 import { addPeriod, getPeriodById, updatePeriod } from '../services/tracking';
+import { reschedulePeriodReminder } from '../services/notifications';
 
 type RouteParams = {
   periodId?: string;
@@ -99,12 +101,17 @@ export default function LogPeriodScreen() {
       await addPeriod(payload);
     }
 
+    await reschedulePeriodReminder({
+      title: t('app.name'),
+      body: t('profile.periodReminderBody'),
+    });
+
     Alert.alert(t('tracking.saved'));
     navigation.goBack();
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
       <Text style={[styles.helper, { color: theme.colors.textSecondary }]}>
         {t('tracking.tapToSelect')}
       </Text>
@@ -116,7 +123,7 @@ export default function LogPeriodScreen() {
           todayTextColor: theme.colors.primary,
           arrowColor: theme.colors.primary,
           selectedDayBackgroundColor: theme.colors.menstruation,
-          selectedDayTextColor: '#FFFFFF',
+          selectedDayTextColor: theme.colors.background,
         }}
       />
 
@@ -167,7 +174,7 @@ export default function LogPeriodScreen() {
                 ]}
                 onPress={() => setFlow(item.key)}
               >
-                <Text style={{ color: selected ? '#FFFFFF' : theme.colors.text }}>
+                <Text style={{ color: selected ? theme.colors.background : theme.colors.text }}>
                   {item.label}
                 </Text>
               </TouchableOpacity>
@@ -192,9 +199,9 @@ export default function LogPeriodScreen() {
         style={[styles.saveButton, { backgroundColor: theme.colors.primary }]}
         onPress={save}
       >
-        <Text style={styles.saveText}>{t('common.save')}</Text>
+        <Text style={[styles.saveText, { color: theme.colors.background }]}>{t('common.save')}</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -249,7 +256,6 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
   },
   saveText: {
-    color: '#FFFFFF',
     fontWeight: '700',
     fontSize: 16,
   },

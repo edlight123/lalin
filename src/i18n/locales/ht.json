@@ -90,7 +90,23 @@
     "symptoms": "Sentòm",
     "mood": "Santiman",
     "notes": "Nòt",
-    "saved": "Anrejistre"
+    "saved": "Anrejistre",
+    "severity": "Entansite",
+    "customSymptoms": "Sentòm Pèsonalize",
+    "addCustomSymptomPlaceholder": "Ajoute pwòp sentòm ou",
+    "customSymptomExists": "Sentòm sa a deja egziste",
+    "medications": "Medikaman ak Sipleman",
+    "addMedicationPlaceholder": "ex. Ibuprofen, Fè",
+    "medicationExists": "Medikaman sa a deja nan lis la",
+    "logSexualActivity": "Anrejistre aktivite seksyèl",
+    "sexualActivityDisclaimer": "Done sa yo prive epi yo sere sèlman sou aparèy ou a.",
+    "protection": "Estati pwoteksyon",
+    "notesOptional": "Nòt (opsyonèl)",
+    "logOvulation": "Anrejistre ovulasyon ak TCB",
+    "ovulationTest": "Tès ovulasyon",
+    "bbt": "Tanperati kò debaz",
+    "bbtPlaceholder": "ex. 36.5",
+    "bbtUnit": "°C"
   },
   "symptoms": {
     "cramps": "Doulè",
@@ -122,18 +138,29 @@
     "predictions": "Previzyon",
     "patterns": "Modèl",
     "nextPeriodOn": "Pwochen règ la ka vini {{date}}",
+    "nextPeriodRange": "Pwochen règ la ka vini ant {{start}} ak {{end}}",
     "nextPeriodUnknown": "Nou pa konnen kilè pwochen règ la ap vini",
+    "cycleRange": "Ranje sik ou souvan: {{min}}–{{max}} jou",
     "last30Days": "30 dènye jou",
     "moodBreakdown": "Santiman yo",
     "topSymptoms": "Sentòm ki pi souvan",
     "noSymptomData": "Pa gen sentòm anrejistre nan 30 dènye jou yo",
     "hintPrefix": "Ti endikasyon:",
     "noData": "Anrejistre premye règ ou pou w wè enfòmasyon",
-    "notEnoughData": "Anrejistre omwen 2 règ pou w ka wè enfòmasyon sou sik ou"
+    "notEnoughData": "Anrejistre omwen 2 règ pou w ka wè enfòmasyon sou sik ou",
+    "irregularityDetected": "Dènye sik ou ({{lastCycle}} jou) diferan anpil de mwayèn ou ({{avg}} jou). Varyasyon sa a ka nòmal, men konsidere suiv sentòm oswa konsènan yon pwofesyonèl sante si sa kontinye.",
+    "showExplanation": "Kòman yo kalkile prediksyon yo?",
+    "hideExplanation": "Kache esplikasyon",
+    "howPredictionsWork": "Kòman li fonksyone",
+    "predictionExplanation": "Prediksyon yo baze sou {{count}} peryòd ou anrejistre. Nou kalkile longè medyan sik la epi nou itilize sa pou predi pwochen règ ou. Entèval dat la konsidere varyasyon natirèl sik la.",
+    "whyPredictionsChange": "Prediksyon yo mete ajou chak fwa ou anrejistre yon nouvo peryòd, paske longè mwayèn sik ou ka chanje. Estrès, vwayaj, maladi, ak chanjman òmonal yo tout ka afekte moman sik la."
   },
   "learn": {
     "title": "Aprann",
     "disclaimer": "Sa yo se enfòmasyon edikatif sèlman. Li pa ranplase konsèy medikal.",
+    "selectCategory": "Gade sijè yo",
+    "readMore": "Li plis",
+    "readLess": "Li mwens",
     "categories": {
       "cycle": "Konprann Sik Ou",
       "health": "Sante Fanm",
@@ -143,35 +170,83 @@
     "articles": {
       "cycleBasics": {
         "title": "Baz sik la: prensipal faz yo",
-        "body": "Yon sik tipik gen faz. Faz règ: jou ou ap senyen. Faz folikilè: enèji ka monte pandan kò a ap prepare yon ze. Ovulasyon: lage ze a nan mitan sik la. Faz luteal: kò a ap prepare pou pwochen règ la; sentòm PMS ka parèt. Chak moun diferan."
+        "body": "An kout\n• Sik la gen faz ki ka chanje santiman ak enèji\n• Swiv la ede w konnen kijan kò ou ye\n\nSa ki komen\nFaz règ: jou ou ap senyen. Faz folikilè: enèji ka monte. Ovulasyon: lage ze a nan mitan sik la. Faz luteal: kò a ap prepare pou pwochen règ la; PMS ka parèt.\n\nSa pou swiv nan Lalin\n• Dat kòmansman/fen règ, ekoulman, nòt\n• Sentòm ak santiman\n\nKilè pou chèche swen\nSi doulè a sevè, si senyen an anpil, oswa si sentòm yo deranje lavi chak jou."
       },
       "trackingTips": {
         "title": "Konsèy pou swiv pi byen",
-        "body": "Anrejistre dat règ la kòmanse, dat li fini (opsyonèl), ekoulman, ak nòt. Avèk tan, modèl tankou longè sik mwayèn vin pi klè. Menm si sik la pa regilye, swiv la ka ede w remake chanjman epi pale ak yon pwofesyonèl si sa nesesè."
+        "body": "An kout\n• Lè w swiv regilyèman, enfòmasyon yo vin pi bon\n• Nòt ede w wè sa ki ka enfliyanse sik la (estrès, vwayaj, maladi)\n\nSa pou fè\n• Mete dat règ la kòmanse (pi enpòtan)\n• Mete dat li fini si ou konnen li\n• Mete sentòm, santiman, ak nòt\n\nSa pou w gade\n• Chanjman nan dat yo, ekoulman, doulè, santiman\n• Modèl sou plizyè mwa\n\nKilè pou chèche swen\nSi gen gwo chanjman ki dire plizyè sik oswa sentòm ki nouvo/sevè."
+      },
+      "cycleLengthAndIrregularity": {
+        "title": "Longè sik la ak sik ki pa regilye",
+        "body": "An kout\n• Gen ti varyasyon ki nòmal\n• Gwo chanjman oswa chanjman bridsoukou merite atansyon\n\nSa ki komen\nEstrès, vwayaj, maladi, bay tete, kèk medikaman, chanjman pwa ka afekte dat yo.\n\nSa pou swiv nan Lalin\n• Dat kòmansman (ak fen si ou konnen)\n• Sentòm, santiman, gwo chanjman nan lavi\n\nKilè pou chèche swen\nSi sik la vin twò enprevi pandan plizyè mwa, si ou rate règ epi ou ta ka ansent, oswa si ou gen gwo doulè / anpil senyen."
+      },
+      "flowAndPeriodLength": {
+        "title": "Ekoulman ak longè règ: sa ki souvan",
+        "body": "An kout\n• “Nòmal” la se souvan kijan li ye pou ou\n• Anpil senyen oswa tèt vire se siy danje\n\nSa ki komen\nEkoulman ak longè règ varye anpil. Gen mwa ki ka pi lejè oswa pi fò.\n\nSa pou swiv nan Lalin\n• Ekoulman chak jou\n• Doulè, fatig, nòt\n\nKilè pou chèche swen\nSi ou ap tranpe pwoteksyon trè vit, si ou pase gwo boul san, si ou santi tèt vire/fèb, oswa si senyen an deranje lavi chak jou."
+      },
+      "spottingAndBleeding": {
+        "title": "Ti senyen ant règ yo",
+        "body": "An kout\n• Ti senyen ka rive, men note li\n• Anpil senyen oswa gwosès + senyen ka ijans\n\nSa ki komen\nChanjman òmòn, estrès, kèk metòd planin, oswa gwosès.\n\nSa pou swiv nan Lalin\n• Dat ak kantite senyen\n• Doulè, lafyèv, tèt vire, oswa likid ki pa nòmal\n\nKilè pou chèche swen\nIjans si se anpil senyen, doulè sevè, ou santi w pral tonbe, oswa si ou ta ka ansent epi ou ap senyen."
       },
       "commonSymptoms": {
         "title": "Sentòm ki komen",
-        "body": "Doulè nan vant, vant gonfle, tèt fè mal, fatig, bouton, ak chanjman santiman yo ka komen bò kote règ la. Repo, bwè dlo, ti mouvman dou, ak chalè ka ede kèk moun. Si sentòm yo twò fò, pa inyore yo."
+        "body": "An kout\n• Gen anpil sentòm ki vini bò kote règ\n• Si yo sevè, pa inyore yo\n\nSa ki komen\nDoulè, vant gonfle, tèt fè mal, fatig, bouton, chanjman santiman.\n\nSa ou ka eseye\nRepo, bwè dlo, chalè, ti mouvman dou.\n\nKilè pou chèche swen\nSi doulè a sevè, si sentòm yo vin pi mal bridsoukou, oswa si yo deranje lavi chak jou."
       },
       "whenToSeekCare": {
         "title": "Kilè pou chèche swen",
-        "body": "Chèche swen si ou gen senyen ki twò fò, ou santi w pral tonbe, doulè ki sevè, senyen ant règ, yon gwo chanjman toudenkou nan sik ou, oswa sentòm ki deranje lavi chak jou. Si se ijans, chèche èd touswit."
+        "body": "An kout\n• Koute kò ou: sa ki sevè oswa chanje bridsoukou enpòtan\n\nPanse chèche swen si ou gen\n• Senyen ki twò fò\n• Ou santi w pral tonbe oswa tèt vire anpil\n• Doulè sevè\n• Senyen ant règ\n• Gwo chanjman nan sik la pandan plizyè sik\n• Sentòm ki deranje lavi chak jou\n\nIjans\nChèche èd touswit pou anpil senyen ak ou santi w pral tonbe, gwo doulè, oswa si ou ta ka ansent epi ou ap senyen."
+      },
+      "dischargeBasics": {
+        "title": "Likid vajen: nòmal oswa pa nòmal",
+        "body": "An kout\n• Likid vajen ka chanje pandan sik la\n• Move sant, gratèl, doulè, oswa lafyèv ka pa nòmal\n\nSa ki komen\nLikid ki pi klè oswa elastik bò kote ovulasyon ka nòmal.\n\nSa pou swiv nan Lalin\n• Koulè/teksti, gratèl/boule\n• Doulè, lafyèv, move sant\n\nKilè pou chèche swen\nSi gen move sant fò, likid vèt/gri, doulè basen, lafyèv, oswa gratèl/boule ki pa pase."
+      },
+      "commonConditions": {
+        "title": "Kèk kondisyon ki komen: PCOS, fibwòm, andometrioz",
+        "body": "An kout\n• Gen kondisyon ki ka eksplike anpil senyen oswa gwo doulè\n• Se pwofesyonèl ki ka fè dyagnostik\n\nSa pou konnen\nPCOS ka bay sik ki pa regilye ak bouton. Fibwòm ka fè règ yo vin anpil. Andometrioz ka bay gwo doulè nan basen, sitou pandan règ.\n\nSa pou swiv nan Lalin\n• Kilè doulè a vini, kantite senyen, lòt sentòm\n• Kijan sa afekte lavi chak jou\n\nKilè pou chèche swen\nSi doulè a sevè, si senyen an anpil, oswa si sentòm yo limite lavi chak jou—pote istwa swiv ou lè w al konsilte."
+      },
+      "stiBasics": {
+        "title": "IST (maladi seksyèl): sa pou konnen",
+        "body": "An kout\n• Anpil IST pa bay sentòm okòmansman\n• Tès se sèl fason pou konnen\n\nKilè pou w panse fè tès\n• Nouvo patnè oswa relasyon san pwoteksyon\n• Likid ki pa nòmal, doulè basen, blesi\n• Boule lè w pipi\n• Senyen apre relasyon\n\nSekirite\nSi ou santi w an danje oswa yo fòse w, chèche sipò nan men yon moun ou fè konfyans."
       },
       "fertileWindow": {
         "title": "Baz peryòd fètil la",
-        "body": "Gwosès pi fasil rive nan jou avan ovulasyon ak jou ovulasyon an. Aplikasyon yo ka bay estimasyon, men li pa egzak. Si ou vle ansent oswa ou vle evite gwosès, itilize metòd serye epi chèche konsèy yon pwofesyonèl."
+        "body": "An kout\n• Gwosès pi fasil rive bò kote ovulasyon\n• Aplikasyon yo bay estimasyon: li pa egzak nèt\n\nSa ki komen\nJou fètil yo souvan se jou avan ovulasyon ak jou ovulasyon an.\n\nSa pou fè\nSi ou vle ansent oswa ou vle evite gwosès, itilize metòd serye epi chèche konsèy yon pwofesyonèl si ou kapab."
       },
       "contraception": {
         "title": "Kontrasepsyon ak planifikasyon",
-        "body": "Gen plizyè metòd pou evite gwosès (baryè, òmòn, IUD, elatriye). Pi bon chwa a depann de sante ou ak sa ou prefere. Yon pwofesyonèl lasante ka ede w chwazi."
+        "body": "An kout\n• Gen anpil opsyon ki efikas\n• Pi bon chwa a depann de sa ou bezwen\n\nSa pou konnen\nGen metòd baryè, metòd òmòn, IUD/implant, elatriye.\n\nSa pou fè\nSi ou kapab, pale ak yon pwofesyonèl pou chwazi metòd ki mache pou sante ou, bidjè ou, ak preferans ou."
+      },
+      "emergencyContraception": {
+        "title": "Planin ijans: baz rapid",
+        "body": "An kout\n• Planin ijans ka diminye risk gwosès apre relasyon san pwoteksyon\n• Pi vit se souvan pi bon\n\nSa pou fè\nChèche èd pi vit posib (disponibilite a ka diferan selon kote).\n\nKilès ki ka ede\nYon pwofesyonèl lasante oswa famasyen ka eksplike opsyon yo selon tan an ak sante ou."
+      },
+      "tryingToConceive": {
+        "title": "Lè w ap chèche ansent: swiv ki ede",
+        "body": "An kout\n• Moman an enpòtan, men kò moun diferan\n• Swiv la ede w wè modèl\n\nSa pou swiv\n• Dat règ yo\n• Chanjman likid vajen\n• Moman relasyon yo\n\nKilè pou chèche swen\nSi ou ap eseye depi plizyè mwa san siksè oswa si sik ou pa regilye, panse pale ak yon pwofesyonèl."
+      },
+      "pregnancyBasics": {
+        "title": "Kòmansman gwosès: sa pou konnen",
+        "body": "An kout\n• Sentòm yo ka sanble ak PMS\n• Yon tès se pi bon fason pou konnen\n\nSiy posib\nRèg anreta, kè plen, tete fè mal, fatig, pipi souvan.\n\nKilè pou chèche swen\nIjans pou gwo doulè nan vant, ou santi w pral tonbe, oswa anpil senyen si ou ta ka ansent."
       },
       "sleepStress": {
         "title": "Dòmi ak estrès",
-        "body": "Dòmi ak estrès ka afekte santiman, enèji, e menm kijan sik la vini. Ti abitid—dòmi a menm lè, respire pou kalme tèt ou, ti mache kout—ka ede byennèt ou nan diferan faz."
+        "body": "An kout\n• Dòmi ak estrès afekte santiman ak enèji\n• Ti abitid yo ka fè diferans\n\nSa ou ka eseye\n• Dòmi leve menm lè\n• Respire, lapriyè oswa meditasyon\n• Ti mache ak ti mouvman\n\nKilè pou chèche swen\nSi estrès, enkyetid, oswa tristès vin sevè oswa dire prèske chak jou."
       },
       "nutritionHydration": {
         "title": "Manje ak bwè dlo",
-        "body": "Manje regilyèman, manje ki gen fè, epi bwè ase dlo ka ede enèji—sitou pandan jou règ yo. Si ou santi w fèb anpil oswa tèt vire, panse pale ak yon pwofesyonèl."
+        "body": "An kout\n• Manje ak dlo ede enèji\n• Anpil senyen ka fè fatig vin pi mal\n\nSa ou ka eseye\n• Manje regilyèman\n• Manje ki gen fè\n• Bwè ase dlo\n\nKilè pou chèche swen\nSi ou santi w fèb anpil, tèt vire, oswa ou soufle kout—sitou si senyen an anpil."
+      },
+      "movementExercise": {
+        "title": "Mouvman ak egzèsis pandan sik la",
+        "body": "An kout\n• Mouvman ka ede santiman ak doulè\n• Ajiste entansite a selon kijan ou santi w\n\nSa ou ka eseye\nMache, detire, yoga, ti fòs lejè.\n\nKilè pou chèche swen\nSi egzèsis bay gwo doulè, tèt vire, ou santi w pral tonbe, oswa senyen ki pa nòmal."
+      },
+      "pmsMood": {
+        "title": "PMS, chanjman santiman, ak lè li twòp",
+        "body": "An kout\n• Chanjman santiman avan règ yo komen\n• Lè li sevè oswa li pa pase, ou merite sipò\n\nSa pou swiv nan Lalin\n• Santiman ak kilè li vini nan sik la\n• Dòmi, estrès, sentòm\n\nKilè pou chèche swen\nSi li sevè, li la prèske chak jou, li afekte lavi w, oswa ou gen panse pou blese tèt ou—chèche èd touswit."
+      },
+      "painRelief": {
+        "title": "Doulè règ: fason pou soulaje",
+        "body": "An kout\n• Gen plizyè bagay ou ka eseye lakay\n• Gwo doulè pa bagay pou w inyore\n\nSa ou ka eseye\nChalè, bwè dlo, ti detire, repo.\n\nMedikaman\nGen medikaman san preskripsyon ki ka ede, men sa depann de sante ou.\n\nKilè pou chèche swen\nSi doulè a sevè, si gen lafyèv, oswa si doulè a anpeche w fè aktivite nòmal yo."
       }
     }
   },

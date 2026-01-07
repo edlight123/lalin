@@ -13,11 +13,41 @@ export type PeriodEntry = {
   createdAt: string;
 };
 
+export type SymptomSeverity = 0 | 1 | 2 | 3;
+
+export type SymptomItem = {
+  key: string; // e.g. 'cramps' or custom label
+  custom?: boolean; // true if user-defined
+  severity: SymptomSeverity;
+};
+
 export type SymptomEntry = {
   id: string;
   date: IsoDateString;
-  symptoms: string[];
+  symptoms: SymptomItem[];
+  medications?: string[]; // e.g. ['Ibuprofen', 'Iron supplement']
   mood?: MoodKey;
+  notes?: string;
+  createdAt: string;
+};
+
+export type ProtectionStatus = 'protected' | 'unprotected' | 'none';
+
+export type SexualActivityEntry = {
+  id: string;
+  date: IsoDateString;
+  protection: ProtectionStatus;
+  notes?: string;
+  createdAt: string;
+};
+
+export type OvulationTestResult = 'positive' | 'negative' | 'none';
+
+export type OvulationEntry = {
+  id: string;
+  date: IsoDateString;
+  ovulationTest?: OvulationTestResult;
+  bbt?: number; // Basal body temperature in Celsius
   notes?: string;
   createdAt: string;
 };

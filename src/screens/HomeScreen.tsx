@@ -6,13 +6,15 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { addDays, differenceInCalendarDays } from 'date-fns';
+import { differenceInCalendarDays } from 'date-fns';
 import { useTheme } from '../contexts/ThemeContext';
 import { getMoodForDate, listPeriods, setMoodForDate } from '../services/tracking';
 import { safeParseIsoDate, toIsoDateString } from '../utils/dates';
+import { computePredictions } from '../services/predictions';
 import type { MoodKey } from '../types/tracking';
 
 type PhaseKey = 'unknown' | 'menstrual' | 'follicular' | 'ovulation' | 'luteal';
@@ -33,57 +35,54 @@ export default function HomeScreen() {
       setTodayMood(savedMood);
 
       const periods = await listPeriods();
-      const sorted = [...periods].sort((a, b) => a.startDate.localeCompare(b.startDate));
-
-      const starts = sorted
-        .map((p) => safeParseIsoDate(p.startDate))
-        .filter((d): d is Date => Boolean(d));
-
-      if (starts.length < 2) {
-        setPhase('unknown');
-        setDaysUntilNextPeriod(null);
-        return;
-      }
-
-      const cycleDiffs: number[] = [];
-      for (let i = 1; i < starts.length; i += 1) {
-        const diff = differenceInCalendarDays(starts[i], starts[i - 1]);
-        if (diff > 0) cycleDiffs.push(diff);
-      }
-
-      if (cycleDiffs.length === 0) {
-        setPhase('unknown');
-        setDaysUntilNextPeriod(null);
-        return;
-      }
-
-      const avgCycleDays = Math.max(
-        1,
-        Math.round(cycleDiffs.reduce((a, b) => a + b, 0) / cycleDiffs.length),
-      );
-
-      const lastStart = starts[starts.length - 1];
-      const predictedNext = addDays(lastStart, avgCycleDays);
       const todayDate = new Date();
-      setDaysUntilNextPeriod(differenceInCalendarDays(predictedNext, todayDate));
+
+      const predictions = computePredictions(periods, todayDate);
+      setDaysUntilNextPeriod(predictions.nextPeriod ? predictions.nextPeriod.daysUntilStart : null);
+
+      const lastStartIso = predictions.stats.lastPeriodStart;
+      const lastStart = lastStartIso ? safeParseIsoDate(lastStartIso) : null;
+      const cycleDays = predictions.stats.cycleLengthDays;
+      const periodLen = predictions.stats.periodLengthDays ?? 5;
+
+      if (!lastStart || !cycleDays) {
+        setPhase('unknown');
+        return;
+      }
 
       const dayOfCycle = differenceInCalendarDays(todayDate, lastStart) + 1;
-      const estimatedPeriodLength = 5;
-      const ovulationDay = Math.max(1, avgCycleDays - 14);
-
       if (dayOfCycle <= 0) {
         setPhase('unknown');
-      } else if (dayOfCycle <= estimatedPeriodLength) {
-        setPhase('menstrual');
-      } else if (dayOfCycle >= ovulationDay - 1 && dayOfCycle <= ovulationDay + 1) {
-        setPhase('ovulation');
-      } else if (dayOfCycle < ovulationDay - 1) {
-        setPhase('follicular');
-      } else if (dayOfCycle <= avgCycleDays) {
-        setPhase('luteal');
-      } else {
-        setPhase('unknown');
+        return;
       }
+
+      if (dayOfCycle <= periodLen) {
+        setPhase('menstrual');
+        return;
+      }
+
+      const ovulationDate = predictions.ovulation?.date
+        ? safeParseIsoDate(predictions.ovulation.date)
+        : null;
+      if (ovulationDate) {
+        const delta = Math.abs(differenceInCalendarDays(todayDate, ovulationDate));
+        if (delta <= 1) {
+          setPhase('ovulation');
+          return;
+        }
+
+        if (todayDate < ovulationDate) {
+          setPhase('follicular');
+          return;
+        }
+      }
+
+      if (dayOfCycle <= cycleDays) {
+        setPhase('luteal');
+        return;
+      }
+
+      setPhase('unknown');
     })();
   }, []);
 
@@ -119,10 +118,11 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <ScrollView
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-      contentContainerStyle={styles.content}
-    >
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+      >
       {/* Header */}
       <View style={styles.header}>
         <Text style={[styles.greeting, { color: theme.colors.text }]}>
@@ -166,8 +166,8 @@ export default function HomeScreen() {
           ]}
           onPress={() => navigation.navigate('LogPeriod' as never)}
         >
-          <Ionicons name="water" size={24} color="#FFFFFF" />
-          <Text style={styles.actionText}>{t('home.logPeriod')}</Text>
+          <Ionicons name="water" size={24} color={theme.colors.background} />
+          <Text style={[styles.actionText, { color: theme.colors.background }]}>{t('home.logPeriod')}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -179,13 +179,13 @@ export default function HomeScreen() {
           ]}
           onPress={() => navigation.navigate('LogSymptoms' as never)}
         >
-          <Ionicons name="fitness" size={24} color="#FFFFFF" />
-          <Text style={styles.actionText}>{t('home.logSymptoms')}</Text>
+          <Ionicons name="fitness" size={24} color={theme.colors.background} />
+          <Text style={[styles.actionText, { color: theme.colors.background }]}>{t('home.logSymptoms')}</Text>
         </TouchableOpacity>
       </View>
 
       {/* Today's Check-in */}
-      <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
+      <View style={[styles.card, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
         <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
           {t('home.todayFeeling')}
         </Text>
@@ -219,12 +219,12 @@ export default function HomeScreen() {
       </View>
 
       {/* Learn Section */}
-      <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
+      <View style={[styles.card, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
         <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
           📚 {t('learn.title')}
         </Text>
         <TouchableOpacity
-          style={styles.learnCard}
+          style={[styles.learnCard, { backgroundColor: theme.colors.background, borderColor: theme.colors.border }]}
           onPress={() => navigation.navigate('Learn' as never)}
         >
           <Text style={[styles.learnTitle, { color: theme.colors.text }]}>
@@ -235,7 +235,8 @@ export default function HomeScreen() {
           </Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -261,6 +262,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 16,
     marginBottom: 16,
+    borderWidth: 1,
   },
   moonCard: {
     alignItems: 'center',
@@ -298,7 +300,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   actionText: {
-    color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '600',
   },
@@ -329,8 +330,8 @@ const styles = StyleSheet.create({
   },
   learnCard: {
     padding: 16,
-    backgroundColor: '#FFFFFF',
     borderRadius: 12,
+    borderWidth: 1,
   },
   learnTitle: {
     fontSize: 16,

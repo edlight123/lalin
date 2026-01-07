@@ -90,7 +90,23 @@
     "symptoms": "Symptoms",
     "mood": "Mood",
     "notes": "Notes",
-    "saved": "Saved"
+    "saved": "Saved",
+    "severity": "Severity",
+    "customSymptoms": "Custom Symptoms",
+    "addCustomSymptomPlaceholder": "Add your own symptom",
+    "customSymptomExists": "This symptom already exists",
+    "medications": "Medications & Supplements",
+    "addMedicationPlaceholder": "e.g. Ibuprofen, Iron",
+    "medicationExists": "This medication is already listed",
+    "logSexualActivity": "Log Sexual Activity",
+    "sexualActivityDisclaimer": "This data is private and stored only on your device.",
+    "protection": "Protection Status",
+    "notesOptional": "Notes (optional)",
+    "logOvulation": "Log Ovulation & BBT",
+    "ovulationTest": "Ovulation Test",
+    "bbt": "Basal Body Temperature",
+    "bbtPlaceholder": "e.g. 36.5",
+    "bbtUnit": "°C"
   },
   "symptoms": {
     "cramps": "Cramps",
@@ -111,6 +127,16 @@
     "energetic": "Energetic",
     "tired": "Tired"
   },
+  "protection": {
+    "protected": "Protected",
+    "unprotected": "Unprotected",
+    "none": "Prefer not to specify"
+  },
+  "ovulationTest": {
+    "positive": "Positive",
+    "negative": "Negative",
+    "none": "Not tested"
+  },
   "insights": {
     "title": "Your Insights",
     "subtitle": "Based on your logged periods",
@@ -122,18 +148,29 @@
     "predictions": "Predictions",
     "patterns": "Patterns",
     "nextPeriodOn": "Next period expected on {{date}}",
+    "nextPeriodRange": "Next period likely between {{start}} and {{end}}",
     "nextPeriodUnknown": "Next period date unknown",
+    "cycleRange": "Typical cycle range: {{min}}–{{max}} days",
     "last30Days": "Last 30 days",
     "moodBreakdown": "Mood breakdown",
     "topSymptoms": "Top symptoms",
     "noSymptomData": "No symptom logs in the last 30 days",
     "hintPrefix": "Pattern hint:",
     "noData": "Log your first period to see insights",
-    "notEnoughData": "Log at least 2 periods to see cycle insights"
+    "notEnoughData": "Log at least 2 periods to see cycle insights",
+    "irregularityDetected": "Your last cycle ({{lastCycle}} days) differs significantly from your average ({{avg}} days). This variation can be normal, but consider tracking symptoms or consulting a healthcare provider if it persists.",
+    "showExplanation": "How are predictions calculated?",
+    "hideExplanation": "Hide explanation",
+    "howPredictionsWork": "How it works",
+    "predictionExplanation": "Predictions are based on your {{count}} logged period(s). We calculate the median cycle length and use that to predict your next period. The date range accounts for natural cycle variation.",
+    "whyPredictionsChange": "Predictions update each time you log a new period, as your average cycle length may shift. Stress, travel, illness, and hormonal changes can all affect cycle timing."
   },
   "learn": {
     "title": "Learn",
     "disclaimer": "Educational information only. This is not medical advice.",
+    "selectCategory": "Browse topics",
+    "readMore": "Read more",
+    "readLess": "Read less",
     "categories": {
       "cycle": "Understanding Your Cycle",
       "health": "Women's Health",
@@ -143,35 +180,83 @@
     "articles": {
       "cycleBasics": {
         "title": "Cycle basics: the main phases",
-        "body": "A typical cycle has phases. Menstrual: bleeding days. Follicular: energy may rise as the body prepares an egg. Ovulation: mid-cycle release of an egg. Luteal: the body prepares for the next period; PMS symptoms can appear. Every body is different."
+        "body": "TL;DR\n• Cycles have phases that can affect mood and energy\n• Tracking helps you learn your pattern\n\nWhat’s common\nMenstrual: bleeding days. Follicular: energy may rise as the body prepares an egg. Ovulation: egg release mid-cycle. Luteal: the body prepares for the next period; PMS can appear.\n\nWhat to track in Lalin\n• Period start/end, flow, and notes\n• Symptoms and mood changes\n\nWhen to seek care\nIf pain is severe, bleeding is very heavy, or symptoms disrupt daily life."
       },
       "trackingTips": {
         "title": "Tracking tips that help",
-        "body": "Log your period start date, optional end date, flow, and notes. Over time, patterns like average cycle length become clearer. If your cycle is irregular, tracking can still help you notice changes and talk to a clinician if needed."
+        "body": "TL;DR\n• Consistent logs improve insights and predictions\n• Notes help you spot triggers (stress, travel, illness)\n\nWhat to do\n• Log period start date (most important)\n• Add end date if you know it\n• Log symptoms, mood, and notes\n\nWhat to look for\n• Changes in timing, flow, pain, or mood\n• Patterns across months (not just one cycle)\n\nWhen to seek care\nIf you have a sudden change that lasts several cycles or symptoms that feel severe or new."
+      },
+      "cycleLengthAndIrregularity": {
+        "title": "Cycle length and irregular cycles",
+        "body": "TL;DR\n• Some variation is normal\n• Big or sudden changes deserve attention\n\nWhat’s common\nStress, travel, illness, breastfeeding, some medications, and weight changes can affect timing.\n\nWhat to track in Lalin\n• Period start dates (and end dates if known)\n• Symptoms, mood, and major life changes\n\nWhen to seek care\nIf your cycle becomes very unpredictable for several months, you miss periods and could be pregnant, or you have severe pain or heavy bleeding."
+      },
+      "flowAndPeriodLength": {
+        "title": "Flow and period length: what’s typical?",
+        "body": "TL;DR\n• “Normal” is often your usual pattern\n• Very heavy bleeding or dizziness is a red flag\n\nWhat’s common\nFlow and duration vary widely. Some cycles are lighter/heavier than others.\n\nWhat to track in Lalin\n• Flow level each day\n• Pain, fatigue, and notes\n\nWhen to seek care\nIf you soak through protection very quickly, pass very large clots, feel dizzy/faint, or bleeding disrupts daily life."
+      },
+      "spottingAndBleeding": {
+        "title": "Spotting and bleeding between periods",
+        "body": "TL;DR\n• Spotting can happen, but track it\n• Heavy bleeding or pregnancy + bleeding can be urgent\n\nWhat’s common\nHormonal changes, stress, some birth control methods, or pregnancy can cause spotting.\n\nWhat to track in Lalin\n• Date and amount of bleeding\n• Pain, fever, dizziness, or unusual discharge\n\nWhen to seek care\nUrgently if bleeding is heavy, pain is severe, you faint, or you could be pregnant and have bleeding."
       },
       "commonSymptoms": {
         "title": "Common symptoms",
-        "body": "Cramps, bloating, headaches, fatigue, acne, and mood changes are common around your period. Rest, hydration, gentle movement, and heat can help some people. Severe symptoms are not something you should ignore."
+        "body": "TL;DR\n• Many symptoms cluster around periods\n• Severe symptoms deserve evaluation\n\nWhat’s common\nCramps, bloating, headaches, fatigue, acne, and mood changes can happen around your period.\n\nWhat to try\n• Rest, hydration, heat, gentle movement\n• Track what helps you\n\nWhen to seek care\nIf pain is severe, symptoms suddenly worsen, or they disrupt daily life."
       },
       "whenToSeekCare": {
         "title": "When to seek care",
-        "body": "Consider medical care if you have very heavy bleeding, fainting, severe pain, bleeding between periods, a sudden change in your cycle, or symptoms that disrupt daily life. For emergencies, seek urgent help right away."
+        "body": "TL;DR\n• Trust your instincts—severe or sudden changes matter\n\nConsider medical care if you have\n• Very heavy bleeding\n• Fainting or severe dizziness\n• Severe pain\n• Bleeding between periods\n• A sudden cycle change lasting multiple cycles\n• Symptoms that disrupt daily life\n\nUrgent care\nSeek urgent help right away for heavy bleeding with fainting, severe pain, or pregnancy + bleeding."
+      },
+      "dischargeBasics": {
+        "title": "Vaginal discharge: what’s normal vs concerning",
+        "body": "TL;DR\n• Discharge changes across the cycle\n• Bad smell, itching, pain, or fever can be concerning\n\nWhat’s common\nDischarge can vary by timing: clearer/stretchier near ovulation is common.\n\nWhat to track in Lalin\n• Color/texture changes, itching/burning\n• Pain, fever, odor\n\nWhen to seek care\nIf there’s strong bad smell, green/gray discharge, pelvic pain, fever, or burning/itching that doesn’t improve."
+      },
+      "commonConditions": {
+        "title": "Common conditions: PCOS, fibroids, endometriosis",
+        "body": "TL;DR\n• Some conditions can explain heavy bleeding or severe pain\n• A clinician is needed for diagnosis\n\nWhat to know\nPCOS can be linked with irregular cycles and acne. Fibroids can cause heavy bleeding. Endometriosis can cause severe pelvic pain, often around periods.\n\nWhat to track in Lalin\n• Timing of pain, bleeding amount, symptoms\n• How symptoms affect daily life\n\nWhen to seek care\nIf pain is severe, bleeding is heavy, or symptoms limit daily life—bring your tracking history to your visit."
+      },
+      "stiBasics": {
+        "title": "STI basics and when to test",
+        "body": "TL;DR\n• Many STIs have no symptoms\n• Testing is the only way to know\n\nWhen to consider testing\n• New partner or unprotected sex\n• Unusual discharge, pelvic pain, sores\n• Burning with urination\n• Bleeding after sex\n\nSafety note\nIf you feel unsafe or pressured, seek support from someone you trust."
       },
       "fertileWindow": {
         "title": "Fertile window basics",
-        "body": "Pregnancy is most likely in the days leading up to and including ovulation. Apps can estimate timing, but it’s not exact. If you’re trying to conceive or avoid pregnancy, consider using reliable methods and guidance from a clinician."
+        "body": "TL;DR\n• Pregnancy is most likely near ovulation\n• Apps estimate—they’re not perfect\n\nWhat’s common\nFertile days often include the days leading up to ovulation and ovulation day.\n\nWhat to do\nIf trying to conceive or avoid pregnancy, use reliable methods and consider clinician guidance."
       },
       "contraception": {
         "title": "Contraception and planning",
-        "body": "Different birth control options work in different ways (barrier methods, hormonal methods, IUDs, etc.). The best choice depends on your health and preferences. A clinician can help you choose what’s right for you."
+        "body": "TL;DR\n• There are many effective options\n• The best method depends on your needs\n\nWhat to know\nOptions include barrier methods, hormonal methods, and IUDs/implants.\n\nWhat to do\nIf you can, talk with a clinician to choose what fits your health, budget, and preferences."
+      },
+      "emergencyContraception": {
+        "title": "Emergency contraception (EC): quick basics",
+        "body": "TL;DR\n• EC can reduce pregnancy risk after unprotected sex\n• Sooner is usually better\n\nWhat to do\nSeek help as soon as possible. Availability varies by country and clinic.\n\nWho can help\nA clinician or pharmacist can explain options based on timing and your health."
+      },
+      "tryingToConceive": {
+        "title": "Trying to conceive: tracking that helps",
+        "body": "TL;DR\n• Timing matters, but bodies vary\n• Tracking can help you notice patterns\n\nWhat to track\n• Period dates\n• Cervical mucus changes\n• Sex timing\n\nWhen to seek care\nIf you’ve been trying for many months without success or you have irregular cycles, consider speaking with a clinician."
+      },
+      "pregnancyBasics": {
+        "title": "Early pregnancy basics",
+        "body": "TL;DR\n• Symptoms can overlap with PMS\n• A test is the best way to know\n\nPossible early signs\nMissed period, nausea, breast tenderness, fatigue, frequent urination.\n\nWhen to seek care\nUrgently for severe abdominal pain, fainting, or heavy bleeding if you could be pregnant."
       },
       "sleepStress": {
         "title": "Sleep and stress",
-        "body": "Sleep and stress can affect mood, energy, and even cycle timing. Small routines—consistent sleep time, relaxing breath work, short walks—can support wellbeing during different cycle phases."
+        "body": "TL;DR\n• Sleep and stress affect mood and energy\n• Small routines add up\n\nWhat to try\n• Consistent sleep/wake time\n• Breath work or prayer/meditation\n• Short walks and light movement\n\nWhen to seek care\nIf stress, anxiety, or low mood feels severe or lasts most days."
       },
       "nutritionHydration": {
         "title": "Nutrition and hydration",
-        "body": "Regular meals, iron-rich foods, and enough water can support energy—especially during bleeding days. If you feel unusually weak or dizzy, consider checking in with a clinician."
+        "body": "TL;DR\n• Food and water support energy\n• Heavy bleeding can worsen fatigue\n\nWhat to try\n• Regular meals\n• Iron-rich foods\n• Enough water\n\nWhen to seek care\nIf you feel unusually weak, dizzy, or short of breath—especially with heavy bleeding."
+      },
+      "movementExercise": {
+        "title": "Movement and exercise across your cycle",
+        "body": "TL;DR\n• Movement can help mood and cramps\n• Adjust intensity by how you feel\n\nWhat to try\nWalking, stretching, yoga, and light strength work.\n\nWhen to seek care\nIf exercise causes severe pain, dizziness, fainting, or unusual bleeding."
+      },
+      "pmsMood": {
+        "title": "PMS, mood changes, and when it’s too much",
+        "body": "TL;DR\n• PMS mood changes are common\n• Severe or persistent symptoms deserve support\n\nWhat to track in Lalin\n• Mood changes and timing in your cycle\n• Sleep, stress, and symptoms\n\nWhen to seek care\nIf symptoms are severe, last most days, affect daily life, or you have thoughts of self-harm—seek help right away."
+      },
+      "painRelief": {
+        "title": "Cramps and pain relief options",
+        "body": "TL;DR\n• Many self-care options can help\n• Severe pain is not something to ignore\n\nWhat to try\nHeat, hydration, gentle stretching, rest.\n\nMedicine note\nOver-the-counter pain medicines may help, but options depend on your health.\n\nWhen to seek care\nIf pain is severe, comes with fever, or prevents normal activities."
       }
     }
   },

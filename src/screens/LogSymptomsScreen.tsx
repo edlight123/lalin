@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Calendar } from 'react-native-calendars';
 import type { DateData } from 'react-native-calendars';
 import { useTranslation } from 'react-i18next';
@@ -8,9 +9,10 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { useTheme } from '../contexts/ThemeContext';
-import type { IsoDateString, MoodKey } from '../types/tracking';
+import type { IsoDateString, MoodKey, SymptomItem, SymptomSeverity } from '../types/tracking';
 import type { RootStackParamList } from '../navigation/RootNavigator';
 import { addSymptoms, getSymptomById, updateSymptoms } from '../services/tracking';
+import Slider from '@react-native-community/slider';
 
 type LogSymptomsRoute = RouteProp<RootStackParamList, 'LogSymptoms'>;
 type LogSymptomsNav = NativeStackNavigationProp<RootStackParamList>;
@@ -37,9 +39,12 @@ export default function LogSymptomsScreen() {
   const symptomId = route.params?.symptomId;
 
   const [date, setDate] = useState<IsoDateString | null>(null);
-  const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
+  const [selectedSymptoms, setSelectedSymptoms] = useState<SymptomItem[]>([]);
   const [mood, setMood] = useState<MoodKey | undefined>(undefined);
   const [notes, setNotes] = useState('');
+  const [customSymptomInput, setCustomSymptomInput] = useState('');
+  const [medications, setMedications] = useState<string[]>([]);
+  const [medicationInput, setMedicationInput] = useState('');
 
   useEffect(() => {
     if (!symptomId) return;
@@ -49,6 +54,7 @@ export default function LogSymptomsScreen() {
       if (!existing || !mounted) return;
       setDate(existing.date);
       setSelectedSymptoms(existing.symptoms ?? []);
+      setMedications(existing.medications ?? []);
       setMood(existing.mood);
       setNotes(existing.notes ?? '');
     })();
@@ -68,9 +74,54 @@ export default function LogSymptomsScreen() {
   }, [date, theme.colors.primary]);
 
   const toggleSymptom = (key: string) => {
+    setSelectedSymptoms((prev) => {
+      const idx = prev.findIndex((s) => s.key === key && !s.custom);
+      if (idx !== -1) {
+        // Remove
+        return prev.filter((_, i) => i !== idx);
+      } else {
+        // Add with default severity 1
+        return [...prev, { key, severity: 1 }];
+      }
+    });
+  };
+
+  const setSymptomSeverity = (key: string, severity: SymptomSeverity, custom = false) => {
     setSelectedSymptoms((prev) =>
-      prev.includes(key) ? prev.filter((x) => x !== key) : [...prev, key],
+      prev.map((s) =>
+        s.key === key && (custom ? s.custom : !s.custom) ? { ...s, severity } : s
+      )
     );
+  };
+
+  const addCustomSymptom = () => {
+    const trimmed = customSymptomInput.trim();
+    if (!trimmed) return;
+    if (selectedSymptoms.some((s) => s.custom && s.key.toLowerCase() === trimmed.toLowerCase())) {
+      Alert.alert(t('tracking.customSymptomExists'));
+      return;
+    }
+    setSelectedSymptoms((prev) => [...prev, { key: trimmed, custom: true, severity: 1 }]);
+    setCustomSymptomInput('');
+  };
+
+  const removeCustomSymptom = (key: string) => {
+    setSelectedSymptoms((prev) => prev.filter((s) => !(s.custom && s.key === key)));
+  };
+
+  const addMedication = () => {
+    const trimmed = medicationInput.trim();
+    if (!trimmed) return;
+    if (medications.some((m) => m.toLowerCase() === trimmed.toLowerCase())) {
+      Alert.alert(t('tracking.medicationExists'));
+      return;
+    }
+    setMedications((prev) => [...prev, trimmed]);
+    setMedicationInput('');
+  };
+
+  const removeMedication = (med: string) => {
+    setMedications((prev) => prev.filter((m) => m !== med));
   };
 
   const save = async () => {
@@ -82,6 +133,7 @@ export default function LogSymptomsScreen() {
     const payload = {
       date,
       symptoms: selectedSymptoms,
+      medications: medications.length > 0 ? medications : undefined,
       mood,
       notes: notes.trim() ? notes.trim() : undefined,
     };
@@ -97,21 +149,22 @@ export default function LogSymptomsScreen() {
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: theme.colors.background }} contentContainerStyle={styles.container}>
-      <Text style={[styles.helper, { color: theme.colors.textSecondary }]}>
-        {t('tracking.tapToSelect')}
-      </Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top']}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.container}>
+        <Text style={[styles.helper, { color: theme.colors.textSecondary }]}>
+          {t('tracking.tapToSelect')}
+        </Text>
 
-      <Calendar
-        onDayPress={(d: DateData) => setDate(d.dateString as IsoDateString)}
-        markedDates={markedDates}
-        theme={{
-          todayTextColor: theme.colors.primary,
-          arrowColor: theme.colors.primary,
-          selectedDayBackgroundColor: theme.colors.primary,
-          selectedDayTextColor: '#FFFFFF',
-        }}
-      />
+        <Calendar
+          onDayPress={(d: DateData) => setDate(d.dateString as IsoDateString)}
+          markedDates={markedDates}
+          theme={{
+            todayTextColor: theme.colors.primary,
+            arrowColor: theme.colors.primary,
+            selectedDayBackgroundColor: theme.colors.primary,
+            selectedDayTextColor: theme.colors.background,
+          }}
+        />
 
       <View style={styles.section}>
         <Text style={[styles.label, { color: theme.colors.text }]}>
@@ -119,26 +172,122 @@ export default function LogSymptomsScreen() {
         </Text>
         <View style={styles.grid}>
           {symptomKeys.map((key) => {
-            const selected = selectedSymptoms.includes(key);
+            const item = selectedSymptoms.find((s) => s.key === key && !s.custom);
+            const selected = !!item;
             return (
-              <TouchableOpacity
-                key={key}
-                style={[
-                  styles.chip,
-                  {
-                    backgroundColor: selected ? theme.colors.primary : theme.colors.surface,
-                    borderColor: theme.colors.border,
-                  },
-                ]}
-                onPress={() => toggleSymptom(key)}
-              >
-                <Text style={{ color: selected ? '#FFFFFF' : theme.colors.text }}>
-                  {t(`symptoms.${key}`)}
-                </Text>
-              </TouchableOpacity>
+              <View key={key} style={{ alignItems: 'center', marginRight: 8, marginBottom: 8 }}>
+                <TouchableOpacity
+                  style={[
+                    styles.chip,
+                    {
+                      backgroundColor: selected ? theme.colors.primary : theme.colors.surface,
+                      borderColor: theme.colors.border,
+                    },
+                  ]}
+                  onPress={() => toggleSymptom(key)}
+                >
+                  <Text style={{ color: selected ? theme.colors.background : theme.colors.text }}>
+                    {t(`symptoms.${key}`)}
+                  </Text>
+                </TouchableOpacity>
+                {selected && (
+                  <View style={{ width: 80 }}>
+                    <Text style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center' }}>{t('tracking.severity')}</Text>
+                    <Slider
+                      value={item.severity}
+                      onValueChange={(v: number) => setSymptomSeverity(key, v as SymptomSeverity)}
+                      minimumValue={0}
+                      maximumValue={3}
+                      step={1}
+                      minimumTrackTintColor={theme.colors.primary}
+                      maximumTrackTintColor={theme.colors.border}
+                      thumbTintColor={theme.colors.primary}
+                    />
+                    <Text style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center' }}>{item.severity}</Text>
+                  </View>
+                )}
+              </View>
             );
           })}
         </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={[styles.label, { color: theme.colors.text }]}>{t('tracking.customSymptoms')}</Text>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
+          <TextInput
+            value={customSymptomInput}
+            onChangeText={setCustomSymptomInput}
+            placeholder={t('tracking.addCustomSymptomPlaceholder')}
+            placeholderTextColor={theme.colors.textLight}
+            style={[styles.input, { flex: 1, minHeight: 44, borderColor: theme.colors.border, color: theme.colors.text }]}
+          />
+          <TouchableOpacity
+            style={[styles.addButton, { backgroundColor: theme.colors.primary }]}
+            onPress={addCustomSymptom}
+          >
+            <Text style={{ color: theme.colors.background, fontWeight: '600' }}>+</Text>
+          </TouchableOpacity>
+        </View>
+        {selectedSymptoms.filter((s) => s.custom).length > 0 && (
+          <View style={styles.grid}>
+            {selectedSymptoms.filter((s) => s.custom).map((item) => (
+              <View key={item.key} style={{ alignItems: 'center', marginRight: 8, marginBottom: 8 }}>
+                <View style={[styles.chip, { backgroundColor: theme.colors.primary, borderColor: theme.colors.border, flexDirection: 'row', gap: 8, alignItems: 'center' }]}>
+                  <Text style={{ color: theme.colors.background }}>{item.key}</Text>
+                  <TouchableOpacity onPress={() => removeCustomSymptom(item.key)}>
+                    <Text style={{ color: theme.colors.background, fontWeight: 'bold' }}>×</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{ width: 80 }}>
+                  <Text style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center' }}>{t('tracking.severity')}</Text>
+                  <Slider
+                    value={item.severity}
+                    onValueChange={(v: number) => setSymptomSeverity(item.key, v as SymptomSeverity, true)}
+                    minimumValue={0}
+                    maximumValue={3}
+                    step={1}
+                    minimumTrackTintColor={theme.colors.primary}
+                    maximumTrackTintColor={theme.colors.border}
+                    thumbTintColor={theme.colors.primary}
+                  />
+                  <Text style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center' }}>{item.severity}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
+      </View>
+
+      <View style={styles.section}>
+        <Text style={[styles.label, { color: theme.colors.text }]}>{t('tracking.medications')}</Text>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
+          <TextInput
+            value={medicationInput}
+            onChangeText={setMedicationInput}
+            placeholder={t('tracking.addMedicationPlaceholder')}
+            placeholderTextColor={theme.colors.textLight}
+            style={[styles.input, { flex: 1, minHeight: 44, borderColor: theme.colors.border, color: theme.colors.text }]}
+          />
+          <TouchableOpacity
+            style={[styles.addButton, { backgroundColor: theme.colors.primary }]}
+            onPress={addMedication}
+          >
+            <Text style={{ color: theme.colors.background, fontWeight: '600' }}>+</Text>
+          </TouchableOpacity>
+        </View>
+        {medications.length > 0 && (
+          <View style={styles.grid}>
+            {medications.map((med) => (
+              <View key={med} style={[styles.chip, { backgroundColor: theme.colors.accent, borderColor: theme.colors.border, flexDirection: 'row', gap: 8, alignItems: 'center' }]}>
+                <Text style={{ color: theme.colors.background }}>{med}</Text>
+                <TouchableOpacity onPress={() => removeMedication(med)}>
+                  <Text style={{ color: theme.colors.background, fontWeight: 'bold' }}>×</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        )}
       </View>
 
       <View style={styles.section}>
@@ -158,7 +307,7 @@ export default function LogSymptomsScreen() {
                 ]}
                 onPress={() => setMood(selected ? undefined : key)}
               >
-                <Text style={{ color: selected ? '#FFFFFF' : theme.colors.text }}>
+                <Text style={{ color: selected ? theme.colors.background : theme.colors.text }}>
                   {t(`moods.${key}`)}
                 </Text>
               </TouchableOpacity>
@@ -183,9 +332,10 @@ export default function LogSymptomsScreen() {
         style={[styles.saveButton, { backgroundColor: theme.colors.primary }]}
         onPress={save}
       >
-        <Text style={styles.saveText}>{t('common.save')}</Text>
+        <Text style={[styles.saveText, { color: theme.colors.background }]}>{t('common.save')}</Text>
       </TouchableOpacity>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -228,8 +378,14 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   saveText: {
-    color: '#FFFFFF',
     fontWeight: '700',
     fontSize: 16,
+  },
+  addButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

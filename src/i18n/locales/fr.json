@@ -90,7 +90,23 @@
     "symptoms": "Symptômes",
     "mood": "Humeur",
     "notes": "Notes",
-    "saved": "Enregistré"
+    "saved": "Enregistré",
+    "severity": "Intensité",
+    "customSymptoms": "Symptômes personnalisés",
+    "addCustomSymptomPlaceholder": "Ajoutez votre propre symptôme",
+    "customSymptomExists": "Ce symptôme existe déjà",
+    "medications": "Médicaments et suppléments",
+    "addMedicationPlaceholder": "ex. Ibuprofène, Fer",
+    "medicationExists": "Ce médicament est déjà listé",
+    "logSexualActivity": "Enregistrer l'activité sexuelle",
+    "sexualActivityDisclaimer": "Ces données sont privées et stockées uniquement sur votre appareil.",
+    "protection": "Statut de protection",
+    "notesOptional": "Notes (optionnel)",
+    "logOvulation": "Enregistrer l'ovulation et TCB",
+    "ovulationTest": "Test d'ovulation",
+    "bbt": "Température corporelle basale",
+    "bbtPlaceholder": "ex. 36.5",
+    "bbtUnit": "°C"
   },
   "symptoms": {
     "cramps": "Crampes",
@@ -110,8 +126,16 @@
     "calm": "Calme",
     "energetic": "Énergique",
     "tired": "Fatiguée"
+  },  "protection": {
+    "protected": "Protégé",
+    "unprotected": "Non protégé",
+    "none": "Préfère ne pas spécifier"
   },
-  "insights": {
+  "ovulationTest": {
+    "positive": "Positif",
+    "negative": "Négatif",
+    "none": "Non testé"
+  },  "insights": {
     "title": "Vos Aperçus",
     "subtitle": "Basé sur vos règles enregistrées",
     "cycleLength": "Durée du Cycle",
@@ -122,18 +146,29 @@
     "predictions": "Prédictions",
     "patterns": "Tendances",
     "nextPeriodOn": "Prochaines règles prévues le {{date}}",
+    "nextPeriodRange": "Prochaines règles probables entre le {{start}} et le {{end}}",
     "nextPeriodUnknown": "Date des prochaines règles inconnue",
+    "cycleRange": "Plage habituelle du cycle : {{min}}–{{max}} jours",
     "last30Days": "30 derniers jours",
     "moodBreakdown": "Humeur (répartition)",
     "topSymptoms": "Symptômes fréquents",
     "noSymptomData": "Aucun symptôme enregistré ces 30 derniers jours",
     "hintPrefix": "Indice :",
     "noData": "Enregistrez vos premières règles pour voir des aperçus",
-    "notEnoughData": "Enregistrez au moins 2 périodes de règles pour voir des aperçus"
+    "notEnoughData": "Enregistrez au moins 2 périodes de règles pour voir des aperçus",
+    "irregularityDetected": "Votre dernier cycle ({{lastCycle}} jours) diffère considérablement de votre moyenne ({{avg}} jours). Cette variation peut être normale, mais envisagez de suivre les symptômes ou de consulter un professionnel de la santé si cela persiste.",
+    "showExplanation": "Comment les prévisions sont-elles calculées?",
+    "hideExplanation": "Masquer l'explication",
+    "howPredictionsWork": "Comment ça marche",
+    "predictionExplanation": "Les prévisions sont basées sur vos {{count}} période(s) enregistrée(s). Nous calculons la durée médiane du cycle et l'utilisons pour prédire vos prochaines règles. La plage de dates tient compte de la variation naturelle du cycle.",
+    "whyPredictionsChange": "Les prévisions se mettent à jour chaque fois que vous enregistrez une nouvelle période, car la durée moyenne de votre cycle peut changer. Le stress, les voyages, la maladie et les changements hormonaux peuvent tous affecter le moment du cycle."
   },
   "learn": {
     "title": "Apprendre",
     "disclaimer": "Information éducative uniquement. Ceci ne remplace pas un avis médical.",
+    "selectCategory": "Parcourir les thèmes",
+    "readMore": "Lire plus",
+    "readLess": "Réduire",
     "categories": {
       "cycle": "Comprendre Votre Cycle",
       "health": "Santé des Femmes",
@@ -143,35 +178,83 @@
     "articles": {
       "cycleBasics": {
         "title": "Bases du cycle : les principales phases",
-        "body": "Un cycle typique a des phases. Menstruations : jours de saignement. Phase folliculaire : l'énergie peut augmenter pendant la préparation d'un ovule. Ovulation : libération d'un ovule au milieu du cycle. Phase lutéale : le corps se prépare aux prochaines règles; des symptômes de SPM peuvent apparaître. Chaque corps est différent."
+        "body": "En bref\n• Le cycle a des phases qui peuvent influencer l’humeur et l’énergie\n• Le suivi aide à comprendre votre schéma\n\nCe qui est courant\nMenstruations : jours de saignement. Phase folliculaire : l’énergie peut augmenter. Ovulation : libération d’un ovule au milieu du cycle. Phase lutéale : le corps se prépare aux prochaines règles; le SPM peut apparaître.\n\nÀ suivre dans Lalin\n• Début/fin des règles, flux, notes\n• Symptômes et humeur\n\nQuand consulter\nSi la douleur est sévère, si les saignements sont très abondants, ou si les symptômes perturbent la vie quotidienne."
       },
       "trackingTips": {
         "title": "Conseils utiles pour le suivi",
-        "body": "Notez la date de début des règles, la date de fin (optionnelle), le flux et des notes. Avec le temps, des tendances comme la durée moyenne du cycle deviennent plus claires. Même avec un cycle irrégulier, le suivi aide à repérer les changements et à en parler à un professionnel si besoin."
+        "body": "En bref\n• Des notes régulières améliorent les aperçus\n• Les notes aident à repérer des déclencheurs (stress, voyage, maladie)\n\nÀ faire\n• Notez la date de début (le plus important)\n• Ajoutez la date de fin si vous la connaissez\n• Notez symptômes, humeur et notes\n\nÀ observer\n• Changements de timing, flux, douleur, humeur\n• Tendances sur plusieurs mois\n\nQuand consulter\nSi vous observez un changement soudain qui dure plusieurs cycles ou des symptômes sévères/nouveaux."
+      },
+      "cycleLengthAndIrregularity": {
+        "title": "Durée du cycle et cycles irréguliers",
+        "body": "En bref\n• Une certaine variation est normale\n• Les changements importants ou soudains méritent attention\n\nCe qui est courant\nStress, voyages, maladie, allaitement, certains médicaments, changements de poids peuvent influencer le timing.\n\nÀ suivre dans Lalin\n• Dates de début (et fin si connue)\n• Symptômes, humeur, changements de vie\n\nQuand consulter\nSi le cycle devient très imprévisible pendant plusieurs mois, si vous avez un retard et pourriez être enceinte, ou si vous avez douleur sévère / saignements abondants."
+      },
+      "flowAndPeriodLength": {
+        "title": "Flux et durée des règles : qu’est-ce qui est typique ?",
+        "body": "En bref\n• Le “normal” est souvent votre schéma habituel\n• Des saignements très abondants ou des malaises sont des signaux d’alerte\n\nCe qui est courant\nLe flux et la durée varient beaucoup. Un cycle peut être plus léger ou plus abondant.\n\nÀ suivre dans Lalin\n• Flux chaque jour\n• Douleur, fatigue, notes\n\nQuand consulter\nSi vous imbibez une protection très rapidement, si vous avez de très gros caillots, des étourdissements/malaises, ou si le saignement perturbe la vie quotidienne."
+      },
+      "spottingAndBleeding": {
+        "title": "Spotting et saignements entre les règles",
+        "body": "En bref\n• Le spotting peut arriver, mais notez-le\n• Saignement abondant ou grossesse + saignement peut être urgent\n\nCe qui est courant\nVariations hormonales, stress, certaines contraceptions, ou grossesse.\n\nÀ suivre dans Lalin\n• Date et quantité\n• Douleur, fièvre, vertiges, pertes inhabituelles\n\nQuand consulter\nEn urgence si le saignement est abondant, la douleur sévère, malaise/évanouissement, ou si vous pourriez être enceinte et saignez."
       },
       "commonSymptoms": {
         "title": "Symptômes fréquents",
-        "body": "Crampes, ballonnements, maux de tête, fatigue, acné et variations d'humeur sont fréquents autour des règles. Le repos, l'hydratation, une activité douce et la chaleur peuvent aider certaines personnes. Des symptômes très intenses ne doivent pas être ignorés."
+        "body": "En bref\n• Plusieurs symptômes se regroupent autour des règles\n• Des symptômes sévères méritent une évaluation\n\nCe qui est courant\nCrampes, ballonnements, maux de tête, fatigue, acné, changements d’humeur.\n\nÀ essayer\nRepos, hydratation, chaleur, activité douce.\n\nQuand consulter\nSi la douleur est sévère, si les symptômes s’aggravent soudainement, ou s’ils perturbent la vie quotidienne."
       },
       "whenToSeekCare": {
         "title": "Quand consulter",
-        "body": "Pensez à consulter si vous avez des saignements très abondants, des malaises/évanouissements, une douleur sévère, des saignements entre les règles, un changement soudain du cycle, ou des symptômes qui perturbent la vie quotidienne. En cas d'urgence, cherchez de l'aide immédiatement."
+        "body": "En bref\n• Fiez-vous à votre ressenti : un changement sévère ou soudain compte\n\nConsultez si vous avez\n• Saignements très abondants\n• Malaises/évanouissements ou vertiges sévères\n• Douleur sévère\n• Saignements entre les règles\n• Changement soudain du cycle sur plusieurs cycles\n• Symptômes qui perturbent la vie quotidienne\n\nUrgence\nCherchez une aide urgente en cas de saignement abondant avec malaise, douleur très forte, ou grossesse + saignement."
+      },
+      "dischargeBasics": {
+        "title": "Pertes vaginales : normal ou inquiétant ?",
+        "body": "En bref\n• Les pertes changent pendant le cycle\n• Mauvaise odeur, démangeaisons, douleur ou fièvre peuvent être inquiétantes\n\nCe qui est courant\nPertes plus claires ou filantes près de l’ovulation.\n\nÀ suivre dans Lalin\n• Couleur/texture, démangeaisons/brûlures\n• Douleur, fièvre, odeur\n\nQuand consulter\nSi l’odeur est forte, couleur verte/grise, douleur pelvienne, fièvre, ou démangeaisons/brûlures persistantes."
+      },
+      "commonConditions": {
+        "title": "Affections fréquentes : SOPK, fibromes, endométriose",
+        "body": "En bref\n• Certaines affections expliquent des règles abondantes ou une douleur sévère\n• Un professionnel est nécessaire pour diagnostiquer\n\nCe qu’il faut savoir\nSOPK : cycles irréguliers, parfois acné. Fibromes : règles abondantes. Endométriose : douleurs pelviennes importantes, souvent autour des règles.\n\nÀ suivre dans Lalin\n• Douleur (timing), quantité de saignement, symptômes\n• Impact sur la vie quotidienne\n\nQuand consulter\nSi douleur sévère, saignements importants, ou symptômes limitants—apportez votre historique de suivi."
+      },
+      "stiBasics": {
+        "title": "IST : l’essentiel et quand se faire dépister",
+        "body": "En bref\n• Beaucoup d’IST n’ont pas de symptômes\n• Le dépistage est le seul moyen de savoir\n\nQuand envisager un dépistage\n• Nouveau partenaire ou rapports non protégés\n• Pertes inhabituelles, douleurs pelviennes, lésions\n• Brûlures urinaires\n• Saignements après un rapport\n\nSécurité\nSi vous vous sentez en danger ou sous pression, cherchez du soutien auprès d’une personne de confiance."
       },
       "fertileWindow": {
         "title": "Fenêtre fertile : l'essentiel",
-        "body": "La grossesse est la plus probable dans les jours précédant et incluant l'ovulation. Les applications peuvent estimer le moment, mais ce n'est pas exact. Si vous essayez de concevoir ou d'éviter une grossesse, utilisez des méthodes fiables et des conseils d'un professionnel."
+        "body": "En bref\n• La grossesse est plus probable près de l’ovulation\n• Les applis estiment : ce n’est pas parfait\n\nCe qui est courant\nLes jours fertiles incluent souvent les jours avant l’ovulation et le jour d’ovulation.\n\nÀ faire\nSi vous essayez de concevoir ou d’éviter une grossesse, utilisez des méthodes fiables et envisagez un avis professionnel."
       },
       "contraception": {
         "title": "Contraception et planification",
-        "body": "Les méthodes de contraception fonctionnent différemment (barrières, hormones, DIU, etc.). Le meilleur choix dépend de votre santé et de vos préférences. Un professionnel de santé peut vous aider à choisir."
+        "body": "En bref\n• Il existe de nombreuses options efficaces\n• Le meilleur choix dépend de vos besoins\n\nCe qu’il faut savoir\nMéthodes barrières, méthodes hormonales, DIU/implant, etc.\n\nÀ faire\nSi possible, discutez avec un professionnel pour choisir selon votre santé, budget et préférences."
+      },
+      "emergencyContraception": {
+        "title": "Contraception d’urgence : bases rapides",
+        "body": "En bref\n• La contraception d’urgence peut réduire le risque après un rapport non protégé\n• Plus tôt est souvent mieux\n\nÀ faire\nDemandez de l’aide dès que possible (la disponibilité varie selon les lieux).\n\nQui peut aider\nUn professionnel de santé ou un pharmacien peut expliquer les options selon le délai et votre santé."
+      },
+      "tryingToConceive": {
+        "title": "Essayer de concevoir : un suivi utile",
+        "body": "En bref\n• Le timing compte, mais chaque corps est différent\n• Le suivi aide à repérer des tendances\n\nÀ suivre\n• Dates des règles\n• Changements de glaire cervicale\n• Timing des rapports\n\nQuand consulter\nSi vous essayez depuis plusieurs mois sans succès ou si vos cycles sont irréguliers, parlez-en à un professionnel."
+      },
+      "pregnancyBasics": {
+        "title": "Début de grossesse : l’essentiel",
+        "body": "En bref\n• Les symptômes peuvent ressembler au SPM\n• Un test est la meilleure façon de savoir\n\nSignes possibles\nRetard de règles, nausées, seins sensibles, fatigue, envies d’uriner fréquentes.\n\nQuand consulter\nEn urgence pour douleur abdominale sévère, malaise/évanouissement, ou saignements abondants si vous pourriez être enceinte."
       },
       "sleepStress": {
         "title": "Sommeil et stress",
-        "body": "Le sommeil et le stress peuvent influencer l'humeur, l'énergie et même le timing du cycle. De petites routines—heure de coucher régulière, respiration relaxante, courtes marches—peuvent soutenir le bien-être selon les phases."
+        "body": "En bref\n• Sommeil et stress influencent humeur et énergie\n• De petites routines peuvent aider\n\nÀ essayer\n• Heure de coucher/réveil régulière\n• Respiration, prière ou méditation\n• Courtes marches et mouvement léger\n\nQuand consulter\nSi le stress, l’anxiété ou la tristesse est sévère ou présente la plupart des jours."
       },
       "nutritionHydration": {
         "title": "Alimentation et hydratation",
-        "body": "Des repas réguliers, des aliments riches en fer et assez d'eau peuvent soutenir l'énergie—surtout pendant les jours de saignement. Si vous vous sentez anormalement faible ou étourdie, pensez à en parler à un professionnel."
+        "body": "En bref\n• Manger et boire aide l’énergie\n• Des règles abondantes peuvent aggraver la fatigue\n\nÀ essayer\n• Repas réguliers\n• Aliments riches en fer\n• Assez d’eau\n\nQuand consulter\nSi vous vous sentez très faible, étourdie, ou essoufflée—surtout avec des saignements importants."
+      },
+      "movementExercise": {
+        "title": "Bouger et faire de l’exercice selon le cycle",
+        "body": "En bref\n• Bouger peut aider l’humeur et les crampes\n• Adaptez l’intensité selon votre état\n\nÀ essayer\nMarche, étirements, yoga, renforcement léger.\n\nQuand consulter\nSi l’exercice provoque douleur sévère, étourdissements, malaise, ou saignements inhabituels."
+      },
+      "pmsMood": {
+        "title": "SPM, humeur et quand c’est trop",
+        "body": "En bref\n• Les variations d’humeur avant les règles sont fréquentes\n• Des symptômes sévères ou persistants méritent du soutien\n\nÀ suivre dans Lalin\n• Humeur et timing dans le cycle\n• Sommeil, stress, symptômes\n\nQuand consulter\nSi c’est sévère, présent la plupart des jours, impacte la vie quotidienne, ou en cas de pensées d’auto-agression—cherchez de l’aide tout de suite."
+      },
+      "painRelief": {
+        "title": "Crampes : options de soulagement",
+        "body": "En bref\n• Plusieurs options peuvent aider\n• Une douleur sévère ne doit pas être ignorée\n\nÀ essayer\nChaleur, hydratation, étirements doux, repos.\n\nMédicaments\nDes antalgiques en vente libre peuvent aider, selon votre santé.\n\nQuand consulter\nSi douleur sévère, fièvre, ou douleur qui empêche les activités normales."
       }
     }
   },

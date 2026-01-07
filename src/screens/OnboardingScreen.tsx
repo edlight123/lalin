@@ -7,6 +7,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../contexts/ThemeContext';
@@ -61,30 +62,31 @@ export default function OnboardingScreen() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.secondary }]}>
-      <ScrollView
-        ref={scrollRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        scrollEventThrottle={16}
-        onScroll={(e) => {
-          const page = Math.round(e.nativeEvent.contentOffset.x / width);
-          setCurrentPage(page);
-        }}
-      >
-        {pages.map((page, index) => (
-          <View key={index} style={[styles.page, { width }]}>
-            <Text style={styles.icon}>{page.icon}</Text>
-            <Text style={[styles.title, { color: theme.colors.text }]}>
-              {page.title}
-            </Text>
-            <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
-              {page.subtitle}
-            </Text>
-          </View>
-        ))}
-      </ScrollView>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.secondary }]} edges={['top']}>
+      <View style={styles.container}>
+        <ScrollView
+          ref={scrollRef}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          scrollEventThrottle={16}
+          onScroll={(e) => {
+            const page = Math.round(e.nativeEvent.contentOffset.x / width);
+            setCurrentPage(page);
+          }}
+        >
+          {pages.map((page, index) => (
+            <View key={index} style={[styles.page, { width }]}>
+              <Text style={styles.icon}>{page.icon}</Text>
+              <Text style={[styles.title, { color: theme.colors.text }]}>
+                {page.title}
+              </Text>
+              <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
+                {page.subtitle}
+              </Text>
+            </View>
+          ))}
+        </ScrollView>
 
       <View style={styles.footer}>
         <View style={styles.pagination}>
@@ -117,7 +119,7 @@ export default function OnboardingScreen() {
             style={[styles.button, { backgroundColor: theme.colors.primary }]}
             onPress={handleNext}
           >
-            <Text style={styles.buttonText}>
+            <Text style={[styles.buttonText, { color: theme.colors.background }]}>
               {currentPage === pages.length - 1
                 ? t('onboarding.getStarted')
                 : t('common.next')}
@@ -125,7 +127,8 @@ export default function OnboardingScreen() {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -183,7 +186,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   buttonText: {
-    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
   },
