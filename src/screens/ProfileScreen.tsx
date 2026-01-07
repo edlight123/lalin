@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme, useThemeMode } from '../contexts/ThemeContext';
 import { exportAllData, resetAllData } from '../services/tracking';
 import {
   getNotificationSettings,
@@ -24,6 +24,7 @@ import {
 export default function ProfileScreen() {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
+  const { themeMode, setThemeMode } = useThemeMode();
 
   const [dailyReminderEnabled, setDailyEnabled] = React.useState(false);
   const [periodReminderEnabled, setPeriodEnabled] = React.useState(false);
@@ -218,6 +219,96 @@ export default function ProfileScreen() {
           </View>
         </View>
 
+        {/* Theme Mode */}
+        <View style={[styles.card, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
+          <Text style={[styles.cardTitle, { color: theme.colors.text }]}>
+            {t('settings.theme')}
+          </Text>
+          <View style={styles.languageButtons}>
+            <TouchableOpacity
+              style={[
+                styles.langButton,
+                {
+                  backgroundColor:
+                    themeMode === 'light'
+                      ? theme.colors.primary
+                      : theme.colors.border,
+                },
+              ]}
+              onPress={() => setThemeMode('light')}
+            >
+              <Ionicons
+                name="sunny"
+                size={16}
+                color={themeMode === 'light' ? theme.colors.background : theme.colors.text}
+                style={{ marginRight: 4 }}
+              />
+              <Text
+                style={[
+                  styles.langText,
+                  { color: themeMode === 'light' ? theme.colors.background : theme.colors.text },
+                ]}
+              >
+                {t('settings.light')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.langButton,
+                {
+                  backgroundColor:
+                    themeMode === 'dark'
+                      ? theme.colors.primary
+                      : theme.colors.border,
+                },
+              ]}
+              onPress={() => setThemeMode('dark')}
+            >
+              <Ionicons
+                name="moon"
+                size={16}
+                color={themeMode === 'dark' ? theme.colors.background : theme.colors.text}
+                style={{ marginRight: 4 }}
+              />
+              <Text
+                style={[
+                  styles.langText,
+                  { color: themeMode === 'dark' ? theme.colors.background : theme.colors.text },
+                ]}
+              >
+                {t('settings.dark')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.langButton,
+                {
+                  backgroundColor:
+                    themeMode === 'auto'
+                      ? theme.colors.primary
+                      : theme.colors.border,
+                },
+              ]}
+              onPress={() => setThemeMode('auto')}
+            >
+              <Ionicons
+                name="phone-portrait"
+                size={16}
+                color={themeMode === 'auto' ? theme.colors.background : theme.colors.text}
+                style={{ marginRight: 4 }}
+              />
+              <Text
+                style={[
+                  styles.langText,
+                  { color: themeMode === 'auto' ? theme.colors.background : theme.colors.text },
+                ]}
+              >
+                {t('settings.auto')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
         {/* Notifications */}
         <View style={[styles.card, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
           <Text style={[styles.cardTitle, { color: theme.colors.text }]}>
@@ -357,6 +448,8 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   langText: {
     fontSize: 16,

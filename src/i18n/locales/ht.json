@@ -306,8 +306,10 @@
   "settings": {
     "title": "Paramèt",
     "language": "Lang",
-    "languageDesc": "Chwazi lang ou prefere",
-    "notifications": "Notifikasyon",
+    "languageDesc": "Chwazi lang ou prefere",    "theme": "Tèm",
+    "light": "Klè",
+    "dark": "Fonse",
+    "auto": "Otomatik",    "notifications": "Notifikasyon",
     "periodReminder": "Rapèl Règ",
     "fertileWindow": "Alèt Peryòd Fètil",
     "privacy": "Vi Prive ak Done",

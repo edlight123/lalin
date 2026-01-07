@@ -314,8 +314,10 @@
   "settings": {
     "title": "Paramètres",
     "language": "Langue",
-    "languageDesc": "Choisissez votre langue préférée",
-    "notifications": "Notifications",
+    "languageDesc": "Choisissez votre langue préférée",    "theme": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "auto": "Auto",    "notifications": "Notifications",
     "periodReminder": "Rappel des Règles",
     "fertileWindow": "Alerte Fenêtre Fertile",
     "privacy": "Confidentialité et Données",
