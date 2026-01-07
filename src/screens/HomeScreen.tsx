@@ -14,7 +14,7 @@ import { differenceInCalendarDays } from 'date-fns';
 import { useTheme } from '../contexts/ThemeContext';
 import { getMoodForDate, listPeriods, setMoodForDate } from '../services/tracking';
 import { safeParseIsoDate, toIsoDateString } from '../utils/dates';
-import { computePredictions } from '../services/predictions';
+import { computePredictions, type ConfidenceLevel } from '../services/predictions';
 import type { MoodKey } from '../types/tracking';
 
 type PhaseKey = 'unknown' | 'menstrual' | 'follicular' | 'ovulation' | 'luteal';
@@ -27,6 +27,10 @@ export default function HomeScreen() {
   const [phase, setPhase] = useState<PhaseKey>('unknown');
   const [daysUntilNextPeriod, setDaysUntilNextPeriod] = useState<number | null>(null);
   const [todayMood, setTodayMood] = useState<MoodKey | undefined>(undefined);
+  const [predictionConfidence, setPredictionConfidence] = useState<{
+    level: ConfidenceLevel;
+    percentage: number;
+  } | null>(null);
 
   const refresh = useCallback(() => {
     (async () => {
@@ -39,6 +43,13 @@ export default function HomeScreen() {
 
       const predictions = computePredictions(periods, todayDate);
       setDaysUntilNextPeriod(predictions.nextPeriod ? predictions.nextPeriod.daysUntilStart : null);
+
+      if (predictions.nextPeriod) {
+        setPredictionConfidence({
+          level: predictions.nextPeriod.confidence,
+          percentage: predictions.nextPeriod.confidencePercentage,
+        });
+      }
 
       const lastStartIso = predictions.stats.lastPeriodStart;
       const lastStart = lastStartIso ? safeParseIsoDate(lastStartIso) : null;
@@ -153,6 +164,21 @@ export default function HomeScreen() {
         <Text style={[styles.nextPeriod, { color: theme.colors.textSecondary }]}>
           {t('home.nextPeriod')} {nextPeriodText}
         </Text>
+        {predictionConfidence && (
+          <View style={styles.confidenceContainer}>
+            <View style={[styles.confidenceBadge, {
+              backgroundColor: predictionConfidence.level === 'high'
+                ? theme.colors.success || '#4CAF50'
+                : predictionConfidence.level === 'medium'
+                ? theme.colors.warning || '#FF9800'
+                : theme.colors.error || '#F44336',
+            }]}>
+              <Text style={[styles.confidenceText, { color: '#fff' }]}>
+                {t(`predictions.confidence.${predictionConfidence.level}`)} ({predictionConfidence.percentage}%)
+              </Text>
+            </View>
+          </View>
+        )}
       </View>
 
       {/* Quick Actions */}
@@ -286,6 +312,21 @@ const styles = StyleSheet.create({
   },
   nextPeriod: {
     fontSize: 14,
+  },
+  confidenceContainer: {
+    marginTop: 8,
+    alignItems: 'flex-start',
+  },
+  confidenceBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  confidenceText: {
+    fontSize: 11,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   actions: {
     flexDirection: 'row',

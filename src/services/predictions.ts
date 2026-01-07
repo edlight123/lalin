@@ -3,12 +3,16 @@ import { addDays, differenceInCalendarDays } from 'date-fns';
 import type { IsoDateString, PeriodEntry } from '../types/tracking';
 import { safeParseIsoDate, toIsoDateString } from '../utils/dates';
 
+export type ConfidenceLevel = 'low' | 'medium' | 'high';
+
 export type CycleStats = {
   hasEnoughData: boolean;
   cycleLengthDays?: number;
   cycleLengthRangeDays?: { min: number; max: number };
   periodLengthDays?: number;
   lastPeriodStart?: IsoDateString;
+  cycleCount?: number;
+  cycleVariability?: number;
 };
 
 export type Predictions = {
@@ -16,13 +20,19 @@ export type Predictions = {
     start: IsoDateString;
     range: { start: IsoDateString; end: IsoDateString };
     daysUntilStart: number;
+    confidence: ConfidenceLevel;
+    confidencePercentage: number;
   };
   ovulation?: {
     date: IsoDateString;
+    confidence: ConfidenceLevel;
+    confidencePercentage: number;
   };
   fertileWindow?: {
     start: IsoDateString;
     end: IsoDateString;
+    confidence: ConfidenceLevel;
+    confidencePercentage: number;
   };
   stats: CycleStats;
 };
@@ -37,6 +47,25 @@ function median(values: number[]): number | undefined {
 
 function clamp(n: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, n));
+}
+
+function calculateConfidence(
+  cycleCount: number,
+  variability: number,
+): { level: ConfidenceLevel; percentage: number } {
+  // Confidence based on number of cycles and consistency
+  const baseScore = Math.min(cycleCount * 10, 70); // Max 70 from count (7+ cycles)
+
+  // Variability penalty: lower variability = higher confidence
+  const variabilityPenalty = Math.min(variability * 5, 30);
+  const score = Math.max(0, baseScore - variabilityPenalty);
+
+  let level: ConfidenceLevel;
+  if (score >= 70) level = 'high';
+  else if (score >= 40) level = 'medium';
+  else level = 'low';
+
+  return { level, percentage: Math.round(score) };
 }
 
 export function computeCycleStats(periods: PeriodEntry[]): CycleStats {
@@ -84,6 +113,8 @@ export function computeCycleStats(periods: PeriodEntry[]): CycleStats {
       : undefined,
     periodLengthDays: clamp(basePeriod, 2, 10),
     lastPeriodStart: sorted.length ? sorted[sorted.length - 1].startDate : undefined,
+    cycleCount: cycleDiffs.length,
+    cycleVariability: uncertainty,
   };
 }
 
@@ -113,14 +144,30 @@ export function computePredictions(periods: PeriodEntry[], today: Date = new Dat
   const fertileStart = toIsoDateString(addDays(ovulationDate, -5));
   const fertileEnd = ovulation;
 
+  // Calculate confidence based on cycle data
+  const cycleCount = stats.cycleCount ?? 0;
+  const variability = stats.cycleVariability ?? 7;
+  const confidence = calculateConfidence(cycleCount, variability);
+
   return {
     stats,
     nextPeriod: {
       start,
       range: { start: rangeStart, end: rangeEnd },
       daysUntilStart,
+      confidence: confidence.level,
+      confidencePercentage: confidence.percentage,
     },
-    ovulation: { date: ovulation },
-    fertileWindow: { start: fertileStart, end: fertileEnd },
+    ovulation: {
+      date: ovulation,
+      confidence: confidence.level,
+      confidencePercentage: Math.max(confidence.percentage - 10, 0), // Slightly lower for ovulation
+    },
+    fertileWindow: {
+      start: fertileStart,
+      end: fertileEnd,
+      confidence: confidence.level,
+      confidencePercentage: Math.max(confidence.percentage - 10, 0),
+    },
   };
 }

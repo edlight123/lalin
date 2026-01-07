@@ -155,17 +155,46 @@
     "predictionExplanation": "Prediksyon yo baze sou {{count}} peryòd ou anrejistre. Nou kalkile longè medyan sik la epi nou itilize sa pou predi pwochen règ ou. Entèval dat la konsidere varyasyon natirèl sik la.",
     "whyPredictionsChange": "Prediksyon yo mete ajou chak fwa ou anrejistre yon nouvo peryòd, paske longè mwayèn sik ou ka chanje. Estrès, vwayaj, maladi, ak chanjman òmonal yo tout ka afekte moman sik la."
   },
+  "predictions": {
+    "confidence": {
+      "low": "Konfyans Fèb",
+      "medium": "Konfyans Mwayèn",
+      "high": "Wo Konfyans"
+    },
+    "confidenceExplanation": "Konfyans lan baze sou kantite sik ou te anrejistre ak règilarite longè sik ou. Plis sik ak timing konsistan = plis konfyans."
+  },
   "learn": {
     "title": "Aprann",
+    "subtitle": "Atik edikatif, konsèy sik, ak repons pou kesyon komen",
     "disclaimer": "Sa yo se enfòmasyon edikatif sèlman. Li pa ranplase konsèy medikal.",
     "selectCategory": "Gade sijè yo",
     "readMore": "Li plis",
     "readLess": "Li mwens",
+    "minRead": "min lekti",
+    "video": "Videyo",
+    "article": "Atik",
+    "articleNotFound": "Yo pa jwenn atik la",
+    "medicalDisclaimer": "Atik sa a se pou enfòmasyon sèlman epi li pa ranplase konsèy medikal pwofesyonèl, dyagnostik, oswa trètman.",
+    "tabs": {
+      "articles": "Atik",
+      "tips": "Konsèy Sik",
+      "faqs": "Kesyon"
+    },
     "categories": {
+      "menstrual-health": "Sante Règ",
+      "fertility": "Fètilite",
+      "symptoms": "Sentòm",
+      "lifestyle": "Abi Lavi",
+      "faq": "Tout Sijè",
       "cycle": "Konprann Sik Ou",
       "health": "Sante Fanm",
-      "fertility": "Fètilite",
       "wellness": "Byennèt"
+    },
+    "phases": {
+      "menstrual": "Faz Règ",
+      "follicular": "Faz Folikilè",
+      "ovulation": "Faz Ovulasyon",
+      "luteal": "Faz Luteal"
     },
     "articles": {
       "cycleBasics": {

@@ -163,17 +163,46 @@
     "predictionExplanation": "Les prévisions sont basées sur vos {{count}} période(s) enregistrée(s). Nous calculons la durée médiane du cycle et l'utilisons pour prédire vos prochaines règles. La plage de dates tient compte de la variation naturelle du cycle.",
     "whyPredictionsChange": "Les prévisions se mettent à jour chaque fois que vous enregistrez une nouvelle période, car la durée moyenne de votre cycle peut changer. Le stress, les voyages, la maladie et les changements hormonaux peuvent tous affecter le moment du cycle."
   },
+  "predictions": {
+    "confidence": {
+      "low": "Faible Confiance",
+      "medium": "Confiance Moyenne",
+      "high": "Haute Confiance"
+    },
+    "confidenceExplanation": "La confiance est basée sur le nombre de cycles que vous avez enregistrés et la régularité de la durée de votre cycle. Plus de cycles et un timing cohérent = confiance plus élevée."
+  },
   "learn": {
     "title": "Apprendre",
+    "subtitle": "Articles éducatifs, conseils de cycle et réponses aux questions fréquentes",
     "disclaimer": "Information éducative uniquement. Ceci ne remplace pas un avis médical.",
     "selectCategory": "Parcourir les thèmes",
     "readMore": "Lire plus",
     "readLess": "Réduire",
+    "minRead": "min de lecture",
+    "video": "Vidéo",
+    "article": "Article",
+    "articleNotFound": "Article introuvable",
+    "medicalDisclaimer": "Cet article est fourni à titre informatif seulement et ne remplace pas un avis médical professionnel, un diagnostic ou un traitement.",
+    "tabs": {
+      "articles": "Articles",
+      "tips": "Conseils de Cycle",
+      "faqs": "FAQ"
+    },
     "categories": {
+      "menstrual-health": "Santé Menstruelle",
+      "fertility": "Fertilité",
+      "symptoms": "Symptômes",
+      "lifestyle": "Mode de Vie",
+      "faq": "Tous les Sujets",
       "cycle": "Comprendre Votre Cycle",
       "health": "Santé des Femmes",
-      "fertility": "Fertilité",
       "wellness": "Bien-être"
+    },
+    "phases": {
+      "menstrual": "Phase Menstruelle",
+      "follicular": "Phase Folliculaire",
+      "ovulation": "Phase d'Ovulation",
+      "luteal": "Phase Lutéale"
     },
     "articles": {
       "cycleBasics": {

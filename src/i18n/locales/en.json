@@ -165,18 +165,48 @@
     "predictionExplanation": "Predictions are based on your {{count}} logged period(s). We calculate the median cycle length and use that to predict your next period. The date range accounts for natural cycle variation.",
     "whyPredictionsChange": "Predictions update each time you log a new period, as your average cycle length may shift. Stress, travel, illness, and hormonal changes can all affect cycle timing."
   },
+  "predictions": {
+    "confidence": {
+      "low": "Low Confidence",
+      "medium": "Medium Confidence",
+      "high": "High Confidence"
+    },
+    "confidenceExplanation": "Confidence is based on the number of cycles you've logged and how consistent your cycle length is. More cycles and consistent timing = higher confidence."
+  },
   "learn": {
     "title": "Learn",
+    "subtitle": "Educational articles, cycle tips, and answers to common questions",
     "disclaimer": "Educational information only. This is not medical advice.",
     "selectCategory": "Browse topics",
     "readMore": "Read more",
     "readLess": "Read less",
+    "minRead": "min read",
+    "video": "Video",
+    "article": "Article",
+    "articleNotFound": "Article not found",
+    "medicalDisclaimer": "This article is for informational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment.",
+    "tabs": {
+      "articles": "Articles",
+      "tips": "Cycle Tips",
+      "faqs": "FAQs"
+    },
     "categories": {
+      "menstrual-health": "Menstrual Health",
+      "fertility": "Fertility",
+      "symptoms": "Symptoms",
+      "lifestyle": "Lifestyle",
+      "faq": "All Topics",
       "cycle": "Understanding Your Cycle",
       "health": "Women's Health",
-      "fertility": "Fertility",
       "wellness": "Wellness"
     },
+    "phases": {
+      "menstrual": "Menstrual Phase",
+      "follicular": "Follicular Phase",
+      "ovulation": "Ovulation Phase",
+      "luteal": "Luteal Phase"
+    },
+
     "articles": {
       "cycleBasics": {
         "title": "Cycle basics: the main phases",

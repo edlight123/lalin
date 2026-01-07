@@ -15,6 +15,7 @@ import LogPeriodScreen from '../screens/LogPeriodScreen';
 import LogSymptomsScreen from '../screens/LogSymptomsScreen';
 import LogSexualActivityScreen from '../screens/LogSexualActivityScreen';
 import LogOvulationScreen from '../screens/LogOvulationScreen';
+import ArticleDetailScreen from '../screens/ArticleDetailScreen';
 
 import { colors } from '../constants/theme';
 import { getOnboardingDone } from '../services/tracking';
@@ -26,6 +27,7 @@ export type RootStackParamList = {
   LogSymptoms: { symptomId?: string } | undefined;
   LogSexualActivity: { activityId?: string } | undefined;
   LogOvulation: { ovulationId?: string } | undefined;
+  ArticleDetail: { articleId: string };
 };
 
 export type TabParamList = {
@@ -196,6 +198,20 @@ export default function RootNavigator() {
         options={{
           headerShown: true,
           title: t('tracking.logOvulation'),
+          headerTintColor: colors.primary,
+          headerBackTitleVisible: false,
+          headerStyle: {
+            backgroundColor: colors.background,
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="ArticleDetail"
+        component={ArticleDetailScreen}
+        options={{
+          headerShown: true,
+          title: t('learn.article'),
           headerTintColor: colors.primary,
           headerBackTitleVisible: false,
           headerStyle: {

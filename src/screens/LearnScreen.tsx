@@ -2,114 +2,176 @@ import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../contexts/ThemeContext';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/RootNavigator';
+import { articles, faqs, cycleTips } from '../data/educationData';
+import { ArticleCategory } from '../types/education';
 
-type CategoryKey = 'cycle' | 'health' | 'fertility' | 'wellness';
-type ArticleKey =
-  | 'cycleBasics'
-  | 'trackingTips'
-  | 'cycleLengthAndIrregularity'
-  | 'flowAndPeriodLength'
-  | 'spottingAndBleeding'
-  | 'commonSymptoms'
-  | 'whenToSeekCare'
-  | 'dischargeBasics'
-  | 'commonConditions'
-  | 'stiBasics'
-  | 'fertileWindow'
-  | 'contraception'
-  | 'emergencyContraception'
-  | 'tryingToConceive'
-  | 'pregnancyBasics'
-  | 'sleepStress'
-  | 'nutritionHydration'
-  | 'movementExercise'
-  | 'pmsMood'
-  | 'painRelief';
+type LearnScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
+type TabKey = 'articles' | 'tips' | 'faqs';
 
 export default function LearnScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
+  const navigation = useNavigation<LearnScreenNavigationProp>();
 
-  const [selectedCategory, setSelectedCategory] = useState<CategoryKey>('cycle');
-  const [expandedArticle, setExpandedArticle] = useState<ArticleKey | null>(null);
+  const [selectedTab, setSelectedTab] = useState<TabKey>('articles');
+  const [selectedCategory, setSelectedCategory] = useState<ArticleCategory>('menstrual-health');
 
-  const categories: CategoryKey[] = useMemo(() => ['cycle', 'health', 'fertility', 'wellness'], []);
-
-  const articlesByCategory: Record<CategoryKey, ArticleKey[]> = useMemo(
-    () => ({
-      cycle: ['cycleBasics', 'trackingTips', 'cycleLengthAndIrregularity', 'flowAndPeriodLength', 'spottingAndBleeding'],
-      health: ['commonSymptoms', 'whenToSeekCare', 'dischargeBasics', 'commonConditions', 'stiBasics'],
-      fertility: ['fertileWindow', 'contraception', 'emergencyContraception', 'tryingToConceive', 'pregnancyBasics'],
-      wellness: ['sleepStress', 'nutritionHydration', 'movementExercise', 'pmsMood', 'painRelief'],
-    }),
+  const tabs: TabKey[] = useMemo(() => ['articles', 'tips', 'faqs'], []);
+  const categories: ArticleCategory[] = useMemo(
+    () => ['menstrual-health', 'fertility', 'symptoms', 'lifestyle', 'faq'],
     [],
   );
 
+  const filteredArticles = articles.filter((article) =>
+    selectedTab === 'faqs' ? article.category === selectedCategory || selectedCategory === 'faq' : article.category === selectedCategory,
+  );
+
+  const filteredFAQs = faqs.filter((faq) => selectedCategory === 'faq' || faq.category === selectedCategory);
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView contentContainerStyle={styles.content}>
         <View
           style={[
             styles.hero,
             {
-              backgroundColor: theme.colors.primaryLight,
+              backgroundColor: theme.colors.surface,
               borderColor: theme.colors.border,
             },
+            theme.shadows.sm,
           ]}
         >
-          <Text style={[styles.title, { color: theme.colors.primaryDark }]}>{t('learn.title')}</Text>
-          <Text style={[styles.subtitle, { color: theme.colors.text }]}>{t('learn.disclaimer')}</Text>
+          <Text style={[styles.title, { color: theme.colors.text }]}>{t('learn.title')}</Text>
+          <Text style={[styles.subtitle, { color: theme.colors.text }]}>{t('learn.subtitle')}</Text>
         </View>
 
-        <Text style={[styles.sectionLabel, { color: theme.colors.textSecondary }]}>
-          {t('learn.selectCategory')}
-        </Text>
-
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryRow}>
-          {categories.map((key) => {
-            const selected = key === selectedCategory;
+        {/* Tab Selector */}
+        <View style={styles.tabContainer}>
+          {tabs.map((tab) => {
+            const selected = tab === selectedTab;
             return (
               <TouchableOpacity
-                key={key}
-                onPress={() => {
-                  setSelectedCategory(key);
-                  setExpandedArticle(null);
-                }}
+                key={tab}
+                onPress={() => setSelectedTab(tab)}
                 style={[
-                  styles.categoryChip,
+                  styles.tab,
                   {
-                    backgroundColor: selected ? theme.colors.primary : theme.colors.surface,
-                    borderColor: selected ? theme.colors.primary : theme.colors.border,
+                    backgroundColor: selected ? theme.colors.primary : 'transparent',
+                    borderBottomWidth: selected ? 0 : 2,
+                    borderBottomColor: theme.colors.border,
                   },
                 ]}
                 accessibilityRole="button"
               >
                 <Text
-                  style={{
-                    color: selected ? theme.colors.background : theme.colors.text,
-                    fontWeight: '700',
-                  }}
+                  style={[
+                    styles.tabText,
+                    {
+                      color: selected ? theme.colors.background : theme.colors.textSecondary,
+                      fontWeight: selected ? '700' : '500',
+                    },
+                  ]}
                 >
-                  {t(`learn.categories.${key}`)}
+                  {t(`learn.tabs.${tab}`)}
                 </Text>
               </TouchableOpacity>
             );
           })}
-        </ScrollView>
+        </View>
 
-        <View style={styles.list}>
-          {articlesByCategory[selectedCategory].map((articleKey) => {
-            const expanded = expandedArticle === articleKey;
-            const body = t(`learn.articles.${articleKey}.body`);
+        {/* Category Selector (for articles and FAQs) */}
+        {(selectedTab === 'articles' || selectedTab === 'faqs') && (
+          <>
+            <Text style={[styles.sectionLabel, { color: theme.colors.textSecondary }]}>
+              {t('learn.selectCategory')}
+            </Text>
 
-            return (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryRow}>
+              {categories.map((category) => {
+                const selected = category === selectedCategory;
+                return (
+                  <TouchableOpacity
+                    key={category}
+                    onPress={() => setSelectedCategory(category)}
+                    style={[
+                      styles.categoryChip,
+                      {
+                        backgroundColor: selected ? theme.colors.primary : theme.colors.surface,
+                        borderColor: selected ? theme.colors.primary : theme.colors.border,
+                      },
+                    ]}
+                    accessibilityRole="button"
+                  >
+                    <Text
+                      style={{
+                        color: selected ? theme.colors.background : theme.colors.text,
+                        fontWeight: '700',
+                      }}
+                    >
+                      {t(`learn.categories.${category}`)}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </>
+        )}
+
+        {/* Content Display */}
+        {selectedTab === 'articles' && (
+          <View style={styles.list}>
+            {filteredArticles.map((article) => (
+              <TouchableOpacity
+                key={article.id}
+                onPress={() => navigation.navigate('ArticleDetail', { articleId: article.id })}
+                style={[
+                  styles.card,
+                  {
+                    backgroundColor: theme.colors.surface,
+                    borderColor: theme.colors.border,
+                  },
+                  theme.shadows.sm,
+                ]}
+                accessibilityRole="button"
+              >
+                <View style={styles.cardHeader}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{article.title}</Text>
+                    <Text style={[styles.cardSummary, { color: theme.colors.textSecondary }]}>
+                      {article.summary}
+                    </Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={20} color={theme.colors.textSecondary} />
+                </View>
+                <View style={styles.cardFooter}>
+                  <Text style={[styles.readTime, { color: theme.colors.textSecondary }]}>
+                    <Ionicons name="time-outline" size={14} /> {article.readTimeMinutes} {t('learn.minRead')}
+                  </Text>
+                  {article.mediaType === 'video' && (
+                    <View style={[styles.videoBadge, { backgroundColor: theme.colors.primaryLight }]}>
+                      <Ionicons name="play-circle" size={14} color={theme.colors.primary} />
+                      <Text style={[styles.videoBadgeText, { color: theme.colors.primary }]}>
+                        {t('learn.video')}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+
+        {selectedTab === 'tips' && (
+          <View style={styles.list}>
+            {cycleTips.map((tip, index) => (
               <View
-                key={articleKey}
+                key={`${tip.phase}-${index}`}
                 style={[
                   styles.card,
                   {
@@ -119,35 +181,50 @@ export default function LearnScreen() {
                   theme.shadows.sm,
                 ]}
               >
-                <TouchableOpacity
-                  onPress={() => setExpandedArticle((prev) => (prev === articleKey ? null : articleKey))}
-                  accessibilityRole="button"
-                >
-                  <Text style={[styles.cardTitle, { color: theme.colors.text }]}>
-                    {t(`learn.articles.${articleKey}.title`)}
-                  </Text>
-                  <Text
-                    style={[styles.cardBody, { color: theme.colors.textSecondary }]}
-                    numberOfLines={expanded ? undefined : 3}
-                    ellipsizeMode="tail"
-                  >
-                    {body}
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => setExpandedArticle((prev) => (prev === articleKey ? null : articleKey))}
-                  accessibilityRole="button"
-                  style={styles.readMoreButton}
-                >
-                  <Text style={[styles.readMoreText, { color: theme.colors.primaryDark }]}>
-                    {expanded ? t('learn.readLess') : t('learn.readMore')}
-                  </Text>
-                </TouchableOpacity>
+                <View style={styles.tipHeader}>
+                  <Ionicons
+                    name={tip.icon as keyof typeof Ionicons.glyphMap}
+                    size={32}
+                    color={theme.colors.primary}
+                  />
+                  <View style={{ flex: 1, marginLeft: 12 }}>
+                    <Text style={[styles.phaseLabel, { color: theme.colors.primary }]}>
+                      {t(`learn.phases.${tip.phase}`)}
+                    </Text>
+                    <Text style={[styles.cardTitle, { color: theme.colors.text }]}>{tip.title}</Text>
+                  </View>
+                </View>
+                <Text style={[styles.tipDescription, { color: theme.colors.textSecondary }]}>
+                  {tip.description}
+                </Text>
               </View>
-            );
-          })}
-        </View>
+            ))}
+          </View>
+        )}
+
+        {selectedTab === 'faqs' && (
+          <View style={styles.list}>
+            {filteredFAQs.map((faq) => (
+              <View
+                key={faq.id}
+                style={[
+                  styles.card,
+                  {
+                    backgroundColor: theme.colors.surface,
+                    borderColor: theme.colors.border,
+                  },
+                  theme.shadows.sm,
+                ]}
+              >
+                <View style={styles.faqHeader}>
+                  <Ionicons name="help-circle" size={24} color={theme.colors.primary} />
+                  <Text style={[styles.faqQuestion, { color: theme.colors.text }]}>{faq.question}</Text>
+                </View>
+                <Text style={[styles.faqAnswer, { color: theme.colors.textSecondary }]}>{faq.answer}</Text>
+              </View>
+            ))}
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -174,6 +251,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     marginTop: 6,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    gap: 0,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tabText: {
+    fontSize: 14,
   },
   sectionLabel: {
     fontSize: 12,
@@ -202,21 +294,71 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 14,
   },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
   cardTitle: {
     fontSize: 16,
     fontWeight: '700',
   },
-  cardBody: {
-    marginTop: 8,
+  cardSummary: {
+    marginTop: 4,
     fontSize: 14,
     lineHeight: 20,
   },
-  readMoreButton: {
-    marginTop: 10,
-    alignSelf: 'flex-start',
+  cardFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 12,
   },
-  readMoreText: {
-    fontSize: 14,
+  readTime: {
+    fontSize: 12,
+  },
+  videoBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  videoBadgeText: {
+    fontSize: 11,
     fontWeight: '700',
+  },
+  tipHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  phaseLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  tipDescription: {
+    marginTop: 12,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  faqHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+  },
+  faqQuestion: {
+    flex: 1,
+    fontSize: 15,
+    fontWeight: '700',
+    lineHeight: 22,
+  },
+  faqAnswer: {
+    marginTop: 10,
+    marginLeft: 34,
+    fontSize: 14,
+    lineHeight: 20,
   },
 });
